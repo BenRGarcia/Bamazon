@@ -1,0 +1,25 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "Node.js command line app with MySQL",
+  "main": "bamazon.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenRGarcia/Bamazon.git"
+  },
+  "author": "ben@SeeBenProgram",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BenRGarcia/Bamazon/issues"
+  },
+  "homepage": "https://github.com/BenRGarcia/Bamazon#readme",
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "inquirer": "^5.2.0",
+    "mysql": "^2.15.0",
+    "table": "^4.0.3"
+  }
+}

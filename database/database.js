@@ -3,14 +3,6 @@ require('dotenv').config()
 const keys = require('../config/keys.js');
 // Import database package
 const mysql = require('mysql');
-// Import mock data
-const _mockData = require('./mockData.json');
-const _products = _mockData.products;
-const _departments = _mockData.departments;
-
-/**
- *  Private Members: variables/methods intentionally not in 'Database' class/constructor
- */
 
 // Set database connection's .env credentials
 const _connection = mysql.createConnection({
@@ -21,12 +13,9 @@ const _connection = mysql.createConnection({
   database: keys.mysql.db_name,
 });
 
-// Initialize the DB with mock data on connection
-async function _initializeMockData(data) {
-  // Delete current database if it exists
-  // Set schema of database for 'products' and 'departments'
-  // Add mock data to the database
-}
+/**
+ *  Private Members: variables/methods intentionally not in 'Database' class/constructor
+ */
 
 // A non-async function that checks if in-stock qty is sufficient
 function _isInStock(product, order) {
@@ -47,18 +36,37 @@ function _calculateTotalCost(product, order) {
   // Return unit rate cost times qty
 }
 
+/* 
+
+_connection.query('', (err, results, fields) => {
+      if (err) throw err;
+      console.log();
+    });
+
+*/
+
 /**
  *  Database Constructor - Intended Public/Priviledged members exposed
  */
 class Database {
   constructor() {
-    // (Private member) Create connection to database, called upon object instantiation
+    // Establish connection with database
     _connection.connect(err => {
       if (err) throw err;
-      console.log(`Connected as id: ${connection.threadId}`);
-      // Initialize database with mock data
-      _initializeMockData(_products)
+      console.log(`MySQL connected as id: ${_connection.threadId}`);
     });
+
+    let query = "SELECT * FROM products WHERE item_id = 1";
+
+    _connection.query(query, function (err, res, fields) {
+      if (err) throw err;
+      // Log all results of the SELECT statement
+      let product = res[0];
+      console.log(product);
+      _connection.end();
+      console.log(`Disconnected from MySQL`);
+    });
+
   }
 
   /**

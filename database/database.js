@@ -14,73 +14,99 @@ const _connection = mysql.createConnection({
 });
 
 /**
- *  Private Members: variables/methods intentionally not in 'Database' class/constructor
+ *  Thoughts:
+ *    1) Effective encapsulation/information hiding, absolutely minimized public interface
+ *        * Rely on ES6 module syntax? (put 'private members' in module's global scope and don't export)
+ *        * Let constructor be a little wasteful with memory?
+ *        * Create a bridge/switch statement to route prototypal method calls to private/priviledged members
+ *        * Should I emulate C "Interfaces" to test implementations on params passed?
+ *    2) Open/Closed Principle
+ *        * How far to go with closed to modification (Object.seal/freeze/defineProperty - read/write/enum/config)
+ *    3) How to minimize DB round trips
+ *        * feels inefficienct -> 1) retrieve initial data, process data based on current value,
+ *                                2) post new/updated data, 
+ *                                3) get DB response absent errors
+ *                                4) again retrieve data to actually see new info
+ *
  */
 
-// A non-async function that checks if in-stock qty is sufficient
-function _isInStock(product, order) {
-  // Check to see if qty of product is available
-  // If yes, return true
-  // If not, return false
-}
-
-// An async function that handles validated order processing
-function _processOrder(product, order) {
-  // Calculate total cost with calculateTotalCost()
-  // Decrease qty and add profit for product in database with updateProductQty()
-  // Then, return order object with additional totalCost data
-}
-
-// A non-async function that calculates the total cost of the purchase
-function _calculateTotalCost(product, order) {
-  // Return unit rate cost times qty
-}
-
-/* 
-
-_connection.query('', (err, results, fields) => {
-      if (err) throw err;
-      console.log();
-    });
-
-*/
-
-/**
- *  Database Constructor - Intended Public/Priviledged members exposed
- */
 class Database {
+
   constructor() {
-    // Establish connection with database
+
+    // Establish connection with database upon instantiation
     _connection.connect(err => {
       if (err) throw err;
       console.log(`MySQL connected as id: ${_connection.threadId}`);
     });
 
-    let query = "SELECT * FROM products WHERE item_id = 1";
+    /**
+     *  Private members (Disadvantage = memory -> a copy made in each instantiation)
+     */
 
-    _connection.query(query, function (err, res, fields) {
-      if (err) throw err;
-      // Log all results of the SELECT statement
-      let product = res[0];
-      console.log(product);
-      _connection.end();
-      console.log(`Disconnected from MySQL`);
-    });
+    // Check if in-stock qty is sufficient
+    var _isInStock = function(product, order) {
+      // Return true if qty of product is available, otherwise false
+    }
 
+    // Executes validated order processing
+    var _processOrder = function (product, order) {
+      // Calculate total cost with calculateTotalCost()
+      // Decrease qty and add profit for product in database with updateProductQty()
+      // Then, return order object with additional totalCost data
+    }
+
+    // Calculates the total cost of the purchase
+    var _calculateTotalCost = function (product, order) {
+      // Return unit rate cost times qty
+    }
+
+    /**
+     *  Priviledged members
+     */
+
+    // Database query strings routed through this method (DRY optimization)
+    var _executeQuery = function (queryString) {
+      try {
+        return new Promise( (resolve, reject) => {
+          // Query database for all products available for sale
+          _connection.query(queryString, (err, res, fields) => {
+            // Error handling
+            if (err) reject(err);
+            // If no error, resolve Promise
+            resolve(res);
+          });
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // Returns all available products
+    this.getAllProducts = async function() {
+      // Set query definition
+      let queryString = 'SELECT * FROM products';
+      // Return all products
+      return await _executeQuery(queryString);
+    }
+
+    // A bridge from public/prototypal members to access private members?
+    this.bridge = async function(command, ...params) {
+      return await command(params);
+    }
   }
 
   /**
-   *  Prototypal methods (Intentionally Public Members)
+   *  Public/prototypal methods
    */
 
-  // An async function that displays products for sale (id, name, price)
-  async getAllProducts() {
-  // Query database for all products available for sale
-  // Return all available products as an array of objects
+  // Disconnect from database
+  disconnect() {
+    return _connection.end();
   }
 
   // An async function that gets low inventory items based on given Qty threshold
-  async getLowInventory(thresholdQty) {
+  getLowInventory(thresholdQty) {
   // Get all products in database
   // Create empty array
   // Iterate over products
@@ -89,7 +115,7 @@ class Database {
   }
 
   // An async function to transact the purchase of a product
-  async placeOrder(order) {
+  placeOrder(order) {
     // Retrieve product's current data from the database
     // Check if product qty isInStock()
     // If yes, return response object from processOrder
@@ -97,25 +123,25 @@ class Database {
   }
 
   // An async function to add additional qty to a product
-  async addInventory(productId, qty) {
+  addInventory(productId, qty) {
     // Get the initial qty of product
     // Then update product with additional qty amount
     // Return product object with new data
   }
 
   // An async function to add a completely new object to the store
-  async addNewProduct(product) {
+  addNewProduct(product) {
     // Send new product with details to database
     // Return products?
   }
 
   // An async function that gets/returns sales data
-  async getSalesData() {
+  getSalesData() {
     // Perform query with left?/right?/inner? join to compose sales data
   }
 
   // An async function that creates a new department
-  async createNewDepartment(department) {
+  createNewDepartment(department) {
     // create mysql command to add new department to table
   }
 }

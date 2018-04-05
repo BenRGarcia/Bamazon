@@ -32,10 +32,11 @@ function determineRole() {
           // const supervisor = new Supervisor();
           break;
         default:
+          console.log(`Houston, we have a problem. Role '${user.role}' was not recognized.`);
           break;
       }
     });
 }
 
-// Initialize
+// Initialize app
 determineRole();

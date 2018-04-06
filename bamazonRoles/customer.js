@@ -1,9 +1,14 @@
+// Require database module
 let Database = require('../database/database.js');
 
-let db = new Database();
+// 1) Display all available products for purchase
+// 2) Which product would you like to buy? (Product ID number)
+// 3) How many units would you like to buy?
 
-db.getAllProducts().then( response => {
-  console.log(`\nResponse in customer.js:\n`);
-  console.log(response);
-  db.disconnect();
-});
+class Customer {
+  constructor() {
+    
+  }
+}
+
+module.exports = Customer;

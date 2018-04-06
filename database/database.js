@@ -13,13 +13,25 @@ const _connection = mysql.createConnection({
   database: keys.mysql.db_name,
 });
 
+/* 
+
+Sample order object:
+
+const order = {
+  item_id: ?,
+  qty: ?,
+  totalCost: 
+};
+
+*/
+
 class Database {
 
   constructor() {
 
     /**
      *  Private members: Immutable/read only via predefined class methods
-     *    (Not optimized -> memory)
+     *    (Not optimized -> memory, replicated in each instantiation... )
      */
 
     // Check if in-stock qty is sufficient
@@ -35,11 +47,26 @@ class Database {
     }
 
     // Executes validated order processing
-    const _processOrder = function (product, order) {
-      _executeQuery().then();
-      // Calculate total cost with calculateTotalCost()
-      // Decrease qty and add profit for product in database with updateProductQty()
-      // Then, return order object with additional totalCost data
+    const _processOrder = async function (product, order) {
+
+      // Calculate, store value of order'a total cost
+      order.totalCost = _calculateTotalCost(product, order);
+
+          // Define variables with DB values to update
+      let stock_quantity = product.stock_quantity - order.qty,
+          item_id = order.item_id,
+          product_sales = order.totalCost,
+          // Define MySQL query to update product data
+          queryString = 'UPDATE products SET ? WHERE ?',
+          params = [{ stock_quantity, product_sales },{ item_id }];
+
+      // Send query to decrease qty and add profit to DB...
+      return await _executeQuery(queryString, params)
+      // ...then return order object
+      .then( () => {
+        return order;
+      })
+      .catch( err => console.error(err) ); 
     }
 
     // Executes MySQL queries
@@ -52,10 +79,14 @@ class Database {
           // If no error, return results
           return res;
         });
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
       }
     }
+
+    /**
+     *  Priviledged Members - Intended Public interface, interacts with private members
+     */
 
     // Returns all available products
     this.getAllProducts = async function() {
@@ -63,6 +94,25 @@ class Database {
       let queryString = 'SELECT * FROM products';
       // Return all products
       return await _executeQuery(queryString);
+    }
+
+    // A function that receives customer orders
+    this.placeOrder = async function(order) {
+      // If item_id not present, throw fatal error (In future, use an Interface?)
+      if (!order.item_id) throw error;
+      // Define MySQL query to retrieve product data
+      let queryString = 'SELECT * FROM products WHERE ?',
+          param = { item_id: order.item_id };
+      // Make call to query DB
+      return await _executeQuery(queryString, param)
+      // After response received from DB...
+      .then( res => {
+        // ...parse out product from response
+        let product = res[0];
+        // If order qty is in stock, process order
+        return _isInStock(product, order) ? _processOrder(product, order) : false;
+      })
+      .catch( err => console.error(err) );
     }
   }
 
@@ -84,13 +134,7 @@ class Database {
 
   // Disconnect from database
   async disconnect() {
-    await _connection.end();    
-  }  
-
-  
-  disconnect() {
-    console.log(`disconnected from database`);
-    return 
+    return await _connection.end();
   }
 
   // An async function that gets low inventory items based on given Qty threshold
@@ -100,14 +144,6 @@ class Database {
   // Iterate over products
     // if qty < threshold, push object to array
   // Return array of objects
-  }
-
-  // An async function to transact the purchase of a product
-  placeOrder(order) {
-    // Retrieve product's current data from the database
-    // Check if product qty isInStock()
-    // If yes, return response object from processOrder
-    // If not, return false
   }
 
   // An async function to add additional qty to a product

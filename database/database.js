@@ -136,7 +136,7 @@ class Database {
             queryString = 'UPDATE products SET ? WHERE ?',
             params = [{ stock_quantity },{ item_id }];
         // Execute query to update DB
-        return _executeQuery(queryString, params);
+        return await _executeQuery(queryString, params);
       })
       .catch( err => console.error(err) );
     }

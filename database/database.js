@@ -13,17 +13,13 @@ const _connection = mysql.createConnection({
   database: keys.mysql.db_name,
 });
 
-/* 
-
-Sample order object:
-
-const order = {
-  item_id: ?,
-  qty: ?,
-  totalCost: 
-};
-
-*/
+/* Sample order object:
+ *   const order = {
+ *     item_id: ?,
+ *     qty: ?,
+ *     totalCost: ?
+ *   };
+ */
 
 class Database {
 
@@ -48,10 +44,8 @@ class Database {
 
     // Executes validated order processing
     const _processOrder = async function (product, order) {
-
       // Calculate, store value of order'a total cost
       order.totalCost = _calculateTotalCost(product, order);
-
           // Define variables with DB values to update
       let stock_quantity = product.stock_quantity - order.qty,
           item_id = order.item_id,
@@ -59,7 +53,6 @@ class Database {
           // Define MySQL query to update product data
           queryString = 'UPDATE products SET ? WHERE ?',
           params = [{ stock_quantity, product_sales },{ item_id }];
-
       // Send query to decrease qty and add profit to DB...
       return await _executeQuery(queryString, params)
       // ...then return order object
@@ -114,6 +107,38 @@ class Database {
       })
       .catch( err => console.error(err) );
     }
+
+    // An async function that gets low inventory items based on given Qty threshold
+    this.getLowInventory = async function (thresholdQty) {
+      // Get all products in database
+      // Create empty array
+      // Iterate over products
+      // if qty < threshold, push object to array
+      // Return array of objects
+    }
+
+    // An async function to add additional qty to a product
+    this.addInventory = async function (productId, qty) {
+      // Get the initial qty of product
+      // Then update product with additional qty amount
+      // Return product object with new data
+    }
+
+    // An async function to add a completely new object to the store
+    this.addNewProduct = async function (product) {
+      // Send new product with details to database
+      // Return products?
+    }
+
+    // An async function that gets/returns sales data
+    this.getSalesData = async function () {
+      // Perform query with left?/right?/inner? join to compose sales data
+    }
+
+    // An async function that creates a new department
+    this.createNewDepartment = async function (department) {
+      // create mysql command to add new department to table
+    }
   }
 
   /**
@@ -123,9 +148,10 @@ class Database {
   // Establish connection with database
   async connect() {
     try {
-      await _connection.connect( err => {
+      return await _connection.connect( err => {
         if (err) throw err;
         console.log(`MySQL connected as id: ${_connection.threadId}`);
+        return true;
       });
     } catch (error) {
       console.error(error);
@@ -133,40 +159,8 @@ class Database {
   }
 
   // Disconnect from database
-  async disconnect() {
-    return await _connection.end();
-  }
-
-  // An async function that gets low inventory items based on given Qty threshold
-  getLowInventory(thresholdQty) {
-  // Get all products in database
-  // Create empty array
-  // Iterate over products
-    // if qty < threshold, push object to array
-  // Return array of objects
-  }
-
-  // An async function to add additional qty to a product
-  addInventory(productId, qty) {
-    // Get the initial qty of product
-    // Then update product with additional qty amount
-    // Return product object with new data
-  }
-
-  // An async function to add a completely new object to the store
-  addNewProduct(product) {
-    // Send new product with details to database
-    // Return products?
-  }
-
-  // An async function that gets/returns sales data
-  getSalesData() {
-    // Perform query with left?/right?/inner? join to compose sales data
-  }
-
-  // An async function that creates a new department
-  createNewDepartment(department) {
-    // create mysql command to add new department to table
+  disconnect() {
+    return _connection.end();
   }
 }
 

@@ -13,32 +13,17 @@ const _connection = mysql.createConnection({
   database: keys.mysql.db_name,
 });
 
-/* Sample order object:
- *   const order = {
- *     item_id: ?,
- *     qty: ?,
- *     totalCost: ?
- *   };
- */
-
 class Database {
 
   constructor() {
 
-    /**
-     *  Private members: Immutable/read only via predefined class methods
-     *    (Not optimized -> memory, replicated in each instantiation...)
-     */
-
-    // Check if in-stock qty is sufficient
+    // Check if in-stock qty is sufficient to fulfill order
     const _isInStock = function (product, order) {
-      // Return true/false if qty of product is available
       return product.stock_quantity >= order.qty;
     }
 
     // Calculates the total cost of the purchase
     const _calculateTotalCost = function (product, order) {
-      // Return unit price times qty
       return product.price * order.qty;
     }
 
@@ -55,7 +40,7 @@ class Database {
           params = [{ stock_quantity, product_sales },{ item_id }];
       // Send query to decrease qty and add profit to DB...
       return await _executeQuery(queryString, params)
-      // ...then return order object
+      // ...then return order object from outer/function scope
       .then( () => {
         return order;
       })
@@ -77,10 +62,6 @@ class Database {
       }
     }
 
-    /**
-     *  Priviledged Members - Intended Public interface, interacts with private members
-     */
-
     // Returns all available products
     this.getAllProducts = async function() {
       // Set query definition
@@ -90,12 +71,10 @@ class Database {
     }
 
     // A function that receives customer orders
-    this.placeOrder = async function(order) {
-      // If item_id not present, throw fatal error (In future, use an Interface?)
-      if (!order.item_id) throw error;
+    this.placeOrder = async function({ item_id, qty }) {
       // Define MySQL query to retrieve product data
       let queryString = 'SELECT * FROM products WHERE ?',
-          param = { item_id: order.item_id };
+          param = { item_id };
       // Make call to query DB
       return await _executeQuery(queryString, param)
       // After response received from DB...
@@ -168,10 +147,6 @@ class Database {
       return await _executeQuery(queryString, params); 
     }
   }
-
-  /**
-   *  Public/prototypal methods
-   */
 
   // Establish connection with database
   async connect() {

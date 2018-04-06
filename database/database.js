@@ -160,21 +160,12 @@ class Database {
     }
 
     // An async function that creates a new department
-    this.createNewDepartment = async function (department) {
-      // create mysql command to add new department to table
-      // If new products department name doesn't exist yet, add to departments table
-      /* .then(res => {
-        // Define MySQL query to retrieve 'departments' table
-        let queryString = 'SELECT * FROM departments';
-        // Get departments table
-        return _executeQuery(queryString)
-          .then(res => {
-            // true/false if department is a new department
-            let isNewDept = res.some(d => d.department_name === department_name);
-          });
-        // Add new department to table if new
-      })
-        .catch(); */
+    this.createNewDepartment = async function ({ department_name, over_head_costs }) {
+      // Define MySQL query to add new department
+      let queryString = 'INSERT INTO departments SET ?',
+          params = { department_name, over_head_costs };
+      // Perform query to add new department
+      return await _executeQuery(queryString, params); 
     }
   }
 

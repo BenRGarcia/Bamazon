@@ -121,10 +121,24 @@ class Database {
     }
 
     // Adds additional qty to a product
-    this.addInventory = async function (productId, qty) {
-      // Get the initial qty of product
-      // Then update product with additional qty amount
-      // Return product object with new data
+    this.addInventory = async function (item_id, qty) {
+      // Define variables with DB values to return product
+      let queryString = 'SELECT * FROM products WHERE ?',
+          param = { item_id };
+      // Get the initial qty of product...
+      return await _executeQuery(queryString, param)
+      // ...then add additional qty
+      .then( res => {
+        // Define variables with DB values to update
+        let item_id = res.item_id,
+            stock_quantity = res.stock_quantity + qty
+            // Define MySQL query to update product data
+            queryString = 'UPDATE products SET ? WHERE ?',
+            params = [{ stock_quantity },{ item_id }];
+        // Execute query to update DB
+        return _executeQuery(queryString, params);
+      })
+      .catch( err => console.error(err) );
     }
 
     // Adds a completely new object to the store

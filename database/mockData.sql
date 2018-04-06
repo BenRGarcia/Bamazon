@@ -23,20 +23,20 @@ CREATE TABLE departments (
 
 INSERT INTO products (product_name, department_name, price, stock_quantity, product_sales)
 VALUES  
-	("Steinway Model D Concert Grand Piano", "Instruments", 150000.00, 2, 150000.00),
-    ("Harmonica", "Instruments", 2.00, 15, 30.00),
-    ("Kazoo", "Instruments", 1.00, 50, 300.00),
-    ("Sectional Sofa", "Furniture", 2000.00, 8, 4000.00),
-    ("Love Seat", "Furniture", 800.00, 12, 1600.00),
-    ("Queen Size Mattress Frame", "Furniture", 95.00, 20, 190.00),
-    ("15-inch Donglebook Pro", "Laptops", 3400.00, 3, 3400.00),
-    ("3TB External SSD", "Laptop Accessories", 170.00, 12, 510.00),
-    ("Donglebook Dongler", "Laptop Accessories", 75.00, 15, 225.00),
-    ("Screen Cleaning Spray", "Laptop Accessories", 17.00, 30, 51.00);
+	("Steinway Model D Concert Grand Piano", "instruments", 150000.00, 2, 150000.00),
+    ("Harmonica", "instruments", 2.00, 15, 30.00),
+    ("Kazoo", "instruments", 1.00, 50, 300.00),
+    ("Sectional Sofa", "furniture", 2000.00, 8, 4000.00),
+    ("Love Seat", "furniture", 800.00, 12, 1600.00),
+    ("Queen Size Mattress Frame", "furniture", 95.00, 20, 190.00),
+    ("15-inch Donglebook Pro", "laptops", 3400.00, 3, 3400.00),
+    ("3TB External SSD", "laptop accessories", 170.00, 12, 510.00),
+    ("Donglebook Dongler", "laptop accessories", 75.00, 15, 225.00),
+    ("Screen Cleaning Spray", "laptop accessories", 17.00, 30, 51.00);
 
 INSERT INTO departments (department_name, over_head_costs)
 VALUES  
-	("Instruments", 10000.00),
-    ("Furniture", 2000.00),
-    ("Laptops", 1000.00),
-    ("Laptop Accessories", 5000.00);
+	("instruments", 10000.00),
+    ("furniture", 2000.00),
+    ("laptops", 1000.00),
+    ("laptop accessories", 5000.00);

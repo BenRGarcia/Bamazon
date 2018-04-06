@@ -27,7 +27,7 @@ class Database {
 
     /**
      *  Private members: Immutable/read only via predefined class methods
-     *    (Not optimized -> memory, replicated in each instantiation... )
+     *    (Not optimized -> memory, replicated in each instantiation...)
      */
 
     // Check if in-stock qty is sufficient
@@ -108,29 +108,32 @@ class Database {
       .catch( err => console.error(err) );
     }
 
-    // An async function that gets low inventory items based on given Qty threshold
-    this.getLowInventory = async function (thresholdQty) {
+    // Gets low inventory items based on given Qty
+    this.getLowInventory = async function (lowQty) {
       // Get all products in database
-      // Create empty array
-      // Iterate over products
-      // if qty < threshold, push object to array
-      // Return array of objects
+      return await this.getAllProducts()
+      .then( res => {
+        // Create new array with only low inventory products
+        let lowInventory = res.filter( product => product.stock_quantity <= lowQty);
+        return lowInventory;
+      })
+      .catch( err => console.error(err) );
     }
 
-    // An async function to add additional qty to a product
+    // Adds additional qty to a product
     this.addInventory = async function (productId, qty) {
       // Get the initial qty of product
       // Then update product with additional qty amount
       // Return product object with new data
     }
 
-    // An async function to add a completely new object to the store
+    // Adds a completely new object to the store
     this.addNewProduct = async function (product) {
       // Send new product with details to database
       // Return products?
     }
 
-    // An async function that gets/returns sales data
+    // Gets sales data
     this.getSalesData = async function () {
       // Perform query with left?/right?/inner? join to compose sales data
     }

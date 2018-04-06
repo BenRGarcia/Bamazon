@@ -141,13 +141,16 @@ class Database {
       .catch( err => console.error(err) );
     }
 
-    // Adds a completely new object to the store
-    this.addNewProduct = async function (product) {
-      // Send new product with details to database
-      // Return products?
+    // Adds new product to the store
+    this.addNewProduct = async function ({ product_name, department_name, price, stock_quantity }) {
+      // Define MySQL query to add new product
+      let queryString = 'INSERT INTO products SET ?',
+          param = { product_name, department_name, price, stock_quantity };
+      // Execute query to update DB
+      return await _executeQuery(queryString, param);
     }
 
-    // Gets sales data
+    // Get sales data
     this.getSalesData = async function () {
       // Perform query with left?/right?/inner? join to compose sales data
     }
@@ -155,6 +158,19 @@ class Database {
     // An async function that creates a new department
     this.createNewDepartment = async function (department) {
       // create mysql command to add new department to table
+      // If new products department name doesn't exist yet, add to departments table
+      /* .then(res => {
+        // Define MySQL query to retrieve 'departments' table
+        let queryString = 'SELECT * FROM departments';
+        // Get departments table
+        return _executeQuery(queryString)
+          .then(res => {
+            // true/false if department is a new department
+            let isNewDept = res.some(d => d.department_name === department_name);
+          });
+        // Add new department to table if new
+      })
+        .catch(); */
     }
   }
 

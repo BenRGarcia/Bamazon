@@ -14,19 +14,15 @@ const _connection = mysql.createConnection({
 });
 
 class Database {
-
   constructor() {
-
     // Check if in-stock qty is sufficient to fulfill order
     const _isInStock = function (product, order) {
       return product.stock_quantity >= order.qty;
     }
-
     // Calculates the total cost of the purchase
     const _calculateTotalCost = function (product, order) {
       return product.price * order.qty;
     }
-
     // Executes validated order processing
     const _processOrder = async function (product, order) {
       // Calculate, store value of order'a total cost
@@ -46,7 +42,6 @@ class Database {
       })
       .catch( err => console.error(err) ); 
     }
-
     // Executes MySQL queries
     const _executeQuery = async function (queryString, params = null) {
       try {
@@ -61,7 +56,6 @@ class Database {
         console.error(err);
       }
     }
-
     // Returns all available products
     this.getAllProducts = async function() {
       // Set query definition
@@ -69,7 +63,6 @@ class Database {
       // Return all products
       return await _executeQuery(queryString);
     }
-
     // A function that receives customer orders
     this.placeOrder = async function({ item_id, qty }) {
       // Define MySQL query to retrieve product data
@@ -86,7 +79,6 @@ class Database {
       })
       .catch( err => console.error(err) );
     }
-
     // Gets low inventory items based on given Qty
     this.getLowInventory = async function (lowQty) {
       // Get all products in database
@@ -98,7 +90,6 @@ class Database {
       })
       .catch( err => console.error(err) );
     }
-
     // Adds additional qty to a product
     this.addInventory = async function (item_id, qty) {
       // Define variables with DB values to return product
@@ -110,16 +101,15 @@ class Database {
       .then( res => {
         // Define variables with DB values to update
         let item_id = res.item_id,
-            stock_quantity = res.stock_quantity + qty
+            stock_quantity = res.stock_quantity + qty,
             // Define MySQL query to update product data
             queryString = 'UPDATE products SET ? WHERE ?',
             params = [{ stock_quantity },{ item_id }];
         // Execute query to update DB
-        return await _executeQuery(queryString, params);
+        return _executeQuery(queryString, params);
       })
       .catch( err => console.error(err) );
     }
-
     // Adds new product to the store
     this.addNewProduct = async function ({ product_name, department_name, price, stock_quantity }) {
       // Define MySQL query to add new product
@@ -128,7 +118,6 @@ class Database {
       // Execute query to update DB
       return await _executeQuery(queryString, param);
     }
-
     // Get sales data by department (left join)
     this.getSalesData = async function () {
       let productCols = 'department_name, product_sales',
@@ -137,7 +126,6 @@ class Database {
       // Perform query with left join to compose sales data
       return await _executeQuery(queryString);
     }
-
     // An async function that creates a new department
     this.createNewDepartment = async function ({ department_name, over_head_costs }) {
       // Define MySQL query to add new department
@@ -147,7 +135,6 @@ class Database {
       return await _executeQuery(queryString, params); 
     }
   }
-
   // Establish connection with database
   async connect() {
     try {
@@ -160,7 +147,6 @@ class Database {
       console.error(error);
     }
   }
-
   // Disconnect from database
   disconnect() {
     return _connection.end();

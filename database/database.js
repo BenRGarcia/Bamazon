@@ -150,9 +150,13 @@ class Database {
       return await _executeQuery(queryString, param);
     }
 
-    // Get sales data
+    // Get sales data by department (left join)
     this.getSalesData = async function () {
-      // Perform query with left?/right?/inner? join to compose sales data
+      let productCols = 'department_name, product_sales',
+          join = 'products.department_name = departments.department_name',
+          queryString = `SELECT ${productCols} FROM products LEFT JOIN departments ON ${join}`;
+      // Perform query with left join to compose sales data
+      return await _executeQuery(queryString);
     }
 
     // An async function that creates a new department

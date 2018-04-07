@@ -67,6 +67,9 @@ class Database {
   constructor() {
     // Empty constructor
   }
+  /**
+   *  Prototypal methods
+   */
   // Establish connection with database
   connect() {
     try {
@@ -158,7 +161,7 @@ class Database {
               params = [{ stock_quantity }, { item_id }];
               // Execute query to update DB
               _executeQuery(queryString, params)
-                .then(res => res)
+                .then(res => resolve(res))
                 .catch(err => reject(err));
           })
           .catch(err => reject(err));
@@ -169,7 +172,6 @@ class Database {
   }
   // Adds new product to the store
   addNewProduct({ product_name, department_name, price, stock_quantity }) {
-
     try {
       return new Promise((resolve, reject) => {
         // Define MySQL query to add new product
@@ -177,29 +179,46 @@ class Database {
           param = { product_name, department_name, price, stock_quantity };
         // Execute query to update DB
         _executeQuery(queryString, param)
-        .then()
-        .catch();
+          .then(res => resolve(res))
+          .catch(err => reject(err));
       });
     } catch (err) {
       console.error(err);
     }
   }
   // Get sales data by department (left join)
-  getSalesData = async function () {
-    let productCols = 'department_name, product_sales',
-      join = 'products.department_name = departments.department_name',
-      queryString = `SELECT ${productCols} FROM products LEFT JOIN departments ON ${join}`;
-    // Perform query with left join to compose sales data
-    return await _executeQuery(queryString);
+  getSalesData() {
+    try {
+      return new Promise((resolve, reject) => {
+        let productCols = 'department_name, product_sales',
+          join = 'products.department_name = departments.department_name',
+          queryString = `SELECT ${productCols} FROM products LEFT JOIN departments ON ${join}`;
+        // Perform query with left join to compose sales data
+        _executeQuery(queryString)
+          .then(res => resolve(res))
+          .catch(err => reject(err));
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
   // An async function that creates a new department
-  createNewDepartment = async function ({ department_name, over_head_costs }) {
-    // Define MySQL query to add new department
-    let queryString = 'INSERT INTO departments SET ?',
-      params = { department_name, over_head_costs };
-    // Perform query to add new department
-    return await _executeQuery(queryString, params);
+  createNewDepartment({ department_name, over_head_costs }) {
+    try {
+      return new Promise((resolve, reject) => {
+        // Define MySQL query to add new department
+        let queryString = 'INSERT INTO departments SET ?',
+          params = { department_name, over_head_costs };
+        // Perform query to add new department
+        _executeQuery(queryString, params)
+          .then(res => resolve(res))
+          .catch(err => reject(err));
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 
 module.exports = Database;
+

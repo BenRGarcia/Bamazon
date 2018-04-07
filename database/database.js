@@ -63,9 +63,23 @@ function _executeQuery(queryString, params = null) {
   }
 }
 
+/**
+ *  Database Class Contructor
+ */
+
 class Database {
   constructor() {
-    // Empty constructor
+    // Connect to DB upon instantiation
+    try {
+      _connection.connect( err => {
+        if (err) throw err;
+        console.log(`MySQL connected as id: ${_connection.threadId}`);
+        // Disconnect
+        _connection.end();
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
   /**
    *  Prototypal methods
@@ -222,3 +236,9 @@ class Database {
 
 module.exports = Database;
 
+/**
+ *  Testing below
+ */
+
+// Instantiate new DB (automatically connect to DB)
+let db = new Database();

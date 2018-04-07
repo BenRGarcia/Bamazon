@@ -33,8 +33,8 @@ function _processOrder(product, order) {
       order.totalCost = _calculateTotalCost(product, order);
       // Define variables with DB values to update
       let stock_quantity = product.stock_quantity - order.qty,
+        product_sales = product.product_sales + order.totalCost,
         item_id = order.item_id,
-        product_sales = order.totalCost,
         // Define MySQL query to update product data
         queryString = 'UPDATE products SET ? WHERE ?',
         params = [{ stock_quantity, product_sales }, { item_id }];
@@ -74,8 +74,6 @@ class Database {
       _connection.connect( err => {
         if (err) throw err;
         console.log(`MySQL connected as id: ${_connection.threadId}`);
-        // Disconnect
-        _connection.end();
       });
     } catch (err) {
       console.error(err);
@@ -84,26 +82,12 @@ class Database {
   /**
    *  Prototypal methods
    */
-  // Establish connection with database
-  connect() {
-    try {
-      return new Promise( (resolve, reject) => {
-        _connection.connect(err => {
-          if (err) reject(err);
-          console.log(`MySQL connected as id: ${_connection.threadId}`);
-          resolve(true);
-        });
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }
   // Disconnect from database
   disconnect() {
     return _connection.end();
   }
   // Returns all available products
-  getAllProducts() {
+  getAllProducts() { // Passing
     try {
       return new Promise((resolve, reject) => {
         // Set query definition
@@ -119,6 +103,7 @@ class Database {
   }
   // A function that receives customer orders
   placeOrder({ item_id, qty }) {
+    let order = { item_id, qty };
     try {
       return new Promise((resolve, reject) => {
         // Define MySQL query to retrieve product data
@@ -178,7 +163,7 @@ class Database {
                 .then(res => resolve(res))
                 .catch(err => reject(err));
           })
-          .catch(err => reject(err));
+          .catch(err => {throw err});
       });
     } catch (err) {
       console.error(err);
@@ -242,3 +227,15 @@ module.exports = Database;
 
 // Instantiate new DB (automatically connect to DB)
 let db = new Database();
+
+const newOrder = {
+  item_id: 3,
+  qty: 2
+};
+
+// Query all products
+db.placeOrder(newOrder)
+.then( res => {
+  console.log(res);
+  db.disconnect();
+});

@@ -64,20 +64,22 @@ class Database {
       });
     }
     // A function that receives customer orders
-    this.placeOrder = async function({ item_id, qty }) {
-      // Define MySQL query to retrieve product data
-      let queryString = 'SELECT * FROM products WHERE ?',
-          param = { item_id };
-      // Make call to query DB
-      return await _executeQuery(queryString, param)
-      // After response received from DB...
-      .then( res => {
-        // ...parse out product from response
-        let product = res[0];
-        // If order qty is in stock, process order
-        return _isInStock(product, order) ? _processOrder(product, order) : false;
-      })
-      .catch(err => console.error(err));
+    this.placeOrder = function({ item_id, qty }) {
+      return new Promise( (resolve, reject) => {
+        // Define MySQL query to retrieve product data
+        let queryString = 'SELECT * FROM products WHERE ?',
+            param = { item_id };
+        // Make call to query DB
+        _executeQuery(queryString, param)
+          // After response received from DB...
+          .then(res => {
+            // ...parse out product from response
+            let product = res[0];
+            // If order qty is in stock, process order
+            _isInStock(product, order) ? resolve(_processOrder(product, order)) : resolve(false);
+          })
+          .catch(err => reject(err));
+      });
     }
     // Gets low inventory items based on given Qty
     this.getLowInventory = async function (lowQty) {

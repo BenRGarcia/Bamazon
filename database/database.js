@@ -80,8 +80,8 @@ class Database {
           resolve(true);
         });
       });
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   }
   // Disconnect from database

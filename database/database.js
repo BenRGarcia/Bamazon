@@ -25,43 +25,55 @@ class Database {
     }
     // Executes validated order processing
     const _processOrder = function (product, order) {
-      return new Promise( (resolve, reject) => {
-        // Calculate, store value of order'a total cost
-        order.totalCost = _calculateTotalCost(product, order);
-        // Define variables with DB values to update
-        let stock_quantity = product.stock_quantity - order.qty,
+      try {
+        return new Promise((resolve, reject) => {
+          // Calculate, store value of order'a total cost
+          order.totalCost = _calculateTotalCost(product, order);
+          // Define variables with DB values to update
+          let stock_quantity = product.stock_quantity - order.qty,
             item_id = order.item_id,
             product_sales = order.totalCost,
             // Define MySQL query to update product data
             queryString = 'UPDATE products SET ? WHERE ?',
             params = [{ stock_quantity, product_sales }, { item_id }];
-        // Send query to decrease qty and add profit to DB...
-        _executeQuery(queryString, params)
-        .then( res => resolve(res))
-        .catch( err => reject(err));
-      });
+          // Send query to decrease qty and add profit to DB...
+          _executeQuery(queryString, params)
+            .then(res => resolve(res))
+            .catch(err => reject(err));
+        });
+      } catch (err) {
+        console.error(err);
+      }
     }
     // Executes MySQL queries
     const _executeQuery = function (queryString, params = null) {
-      return new Promise( (resolve, reject) => {
-        _connection.query(queryString, params, (err, res, fields) => {
-          // Error handling
-          if (err) reject(err);
-          // If no error, return results
-          resolve(res);
+      try {
+        return new Promise((resolve, reject) => {
+          _connection.query(queryString, params, (err, res, fields) => {
+            // Error handling
+            if (err) reject(err);
+            // If no error, return results
+            resolve(res);
+          });
         });
-      });
+      } catch (err) {
+        console.error(err);
+      }
     }
     // Returns all available products
     this.getAllProducts = function() {
-      return new Promise( (resolve, reject) => {
-        // Set query definition
-        let queryString = 'SELECT * FROM products';
-        // Return all products
-        _executeQuery(queryString)
-        .then(res => resolve(res))
-        .catch(err => console.error(err));
-      });
+      try {
+        return new Promise((resolve, reject) => {
+          // Set query definition
+          let queryString = 'SELECT * FROM products';
+          // Return all products
+          _executeQuery(queryString)
+            .then(res => resolve(res))
+            .catch(err => reject(err));
+        });
+      } catch (error) {
+        console.error(err);
+      }
     }
     // A function that receives customer orders
     this.placeOrder = function({ item_id, qty }) {
@@ -82,15 +94,17 @@ class Database {
       });
     }
     // Gets low inventory items based on given Qty
-    this.getLowInventory = async function (lowQty) {
-      // Get all products in database
-      return await this.getAllProducts()
-      .then( res => {
-        // Create new array with only low inventory products
-        let lowInventory = res.filter( product => product.stock_quantity <= lowQty);
-        return lowInventory;
-      })
-      .catch(err => console.error(err));
+    this.getLowInventory = function (lowQty) {
+      return new Promise( (resolve, reject) => {
+        // Get all products in database
+        this.getAllProducts()
+        .then(res => {
+          // Create new array with only low inventory products
+          let lowInventory = res.filter(product => product.stock_quantity <= lowQty);
+          resolve(lowInventory);
+        })
+        .catch(err => reject(err));
+      });
     }
     // Adds additional qty to a product
     this.addInventory = async function (item_id, qty) {

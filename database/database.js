@@ -54,11 +54,14 @@ class Database {
     }
     // Returns all available products
     this.getAllProducts = function() {
-
-      // Set query definition
-      let queryString = 'SELECT * FROM products';
-      // Return all products
-      return await _executeQuery(queryString);
+      return new Promise( (resolve, reject) => {
+        // Set query definition
+        let queryString = 'SELECT * FROM products';
+        // Return all products
+        _executeQuery(queryString)
+        .then(res => resolve(res))
+        .catch(err => console.error(err));
+      });
     }
     // A function that receives customer orders
     this.placeOrder = async function({ item_id, qty }) {
@@ -74,7 +77,7 @@ class Database {
         // If order qty is in stock, process order
         return _isInStock(product, order) ? _processOrder(product, order) : false;
       })
-      .catch( err => console.error(err) );
+      .catch(err => console.error(err));
     }
     // Gets low inventory items based on given Qty
     this.getLowInventory = async function (lowQty) {
@@ -85,7 +88,7 @@ class Database {
         let lowInventory = res.filter( product => product.stock_quantity <= lowQty);
         return lowInventory;
       })
-      .catch( err => console.error(err) );
+      .catch(err => console.error(err));
     }
     // Adds additional qty to a product
     this.addInventory = async function (item_id, qty) {
@@ -105,7 +108,7 @@ class Database {
         // Execute query to update DB
         return _executeQuery(queryString, params);
       })
-      .catch( err => console.error(err) );
+      .catch(err => console.error(err));
     }
     // Adds new product to the store
     this.addNewProduct = async function ({ product_name, department_name, price, stock_quantity }) {

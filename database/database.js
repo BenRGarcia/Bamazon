@@ -25,45 +25,36 @@ class Database {
     }
     // Executes validated order processing
     const _processOrder = function (product, order) {
-      try {
-        return new Promise( (resolve, reject) => {
-          // Calculate, store value of order'a total cost
-          order.totalCost = _calculateTotalCost(product, order);
-          // Define variables with DB values to update
-          let stock_quantity = product.stock_quantity - order.qty,
+      return new Promise( (resolve, reject) => {
+        // Calculate, store value of order'a total cost
+        order.totalCost = _calculateTotalCost(product, order);
+        // Define variables with DB values to update
+        let stock_quantity = product.stock_quantity - order.qty,
             item_id = order.item_id,
             product_sales = order.totalCost,
             // Define MySQL query to update product data
             queryString = 'UPDATE products SET ? WHERE ?',
             params = [{ stock_quantity, product_sales }, { item_id }];
-            // Send query to decrease qty and add profit to DB...
-          _executeQuery(queryString, params)
-          .then( res => {
-            resolve(res);
-          })
-          .catch( err => reject(err));
-        });
-      } catch (err) {
-        console.error(err);
-      }
+        // Send query to decrease qty and add profit to DB...
+        _executeQuery(queryString, params)
+        .then( res => resolve(res))
+        .catch( err => reject(err));
+      });
     }
     // Executes MySQL queries
     const _executeQuery = function (queryString, params = null) {
-      try {
-        return new Promise( (resolve, reject) => {
-          _connection.query(queryString, params, (err, res, fields) => {
-            // Error handling
-            if (err) reject(err);
-            // If no error, return results
-            resolve(res);
-          });
+      return new Promise( (resolve, reject) => {
+        _connection.query(queryString, params, (err, res, fields) => {
+          // Error handling
+          if (err) reject(err);
+          // If no error, return results
+          resolve(res);
         });
-      } catch (error) {
-        console.error(error);
-      }
+      });
     }
     // Returns all available products
-    this.getAllProducts = async function() {
+    this.getAllProducts = function() {
+
       // Set query definition
       let queryString = 'SELECT * FROM products';
       // Return all products

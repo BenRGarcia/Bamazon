@@ -26,7 +26,6 @@ const question3 = {
   message: `Please type in the ${blue}quantity${white} you wish to increase it by:`,
   validate: id => !isNaN(id)
 };
-// product_name, department_name, price, stock_quantity
 const question4 = {
   name: 'product_name',
   type: 'input',
@@ -103,6 +102,7 @@ function viewProducts() {
         tableRow.push(product.product_name);
         tableRow.push(`$` + `${product.price.toFixed(2)}`.padStart(10));
         tableRow.push(product.stock_quantity);
+        // Add new row to products array
         products.push(tableRow);
       });
       let tableConfig = {
@@ -152,7 +152,7 @@ function viewLowInventory() {
     .catch(err => { throw err });
 };
 // Add inventory to existing product
-function addInventory() { // item_id AND qty -> { item_id, qty}
+function addInventory() {
   inquirer
     .prompt(addInventoryQuestions)
     .then(inventory => {
@@ -166,7 +166,7 @@ function addInventory() { // item_id AND qty -> { item_id, qty}
     })
     .catch(err => { throw err });
 };
-// Add new product : product_name, department_name, price, stock_quantity
+// Add new product
 function addNewProduct() {
   inquirer
     .prompt(addNewProductQuestions)
@@ -182,7 +182,7 @@ function addNewProduct() {
 // Exit program
 function exit() {
   db.disconnect();
-  // Clear the terminal
+  // Clear the terminal upon exit
   console.reset();
 }
 

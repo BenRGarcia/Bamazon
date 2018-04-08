@@ -44,6 +44,7 @@ function initialize() {
         tableRow.push(product.item_id);
         tableRow.push(product.product_name);
         tableRow.push(`$` + `${product.price.toFixed(2)}`.padStart(10));
+        // Add new row to products array
         products.push(tableRow);
       });
       let tableConfig = {

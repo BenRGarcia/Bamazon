@@ -83,7 +83,7 @@ function initialize() {
             return exit();
             break;
           default:
-            console.log(`Houston, we have a problem. Manager action '${manager.action}' was not recognized.`);
+            console.log(`Houston, we have a problem. Manager action ${blueBG} '${manager.action}' ${blackBG} was not recognized.`);
             break;
         }
       })

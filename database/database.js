@@ -76,7 +76,7 @@ class Database {
     try {
       _connection.connect( err => {
         if (err) throw err;
-        console.log(`MySQL connected as id: ${_connection.threadId}`);
+        // console.log(`MySQL connected as id: ${_connection.threadId}`);
       });
     } catch (err) {console.error(err);}
   }

@@ -5,7 +5,7 @@ const { table } = require('table');
 // Create global access to DB if instantiated
 let db;
 // Define variables for ANSI text display styling
-let blueBG = '\u001b[44;1m', blackBG = '\u001b[0m', white = '\u001b[37m', blue = '\u001b[34m';
+let blueBG = '\u001b[44;1m', blackBG = '\u001b[0m', redBG = '\u001b[41;1m', greenBG = '\u001b[42;1m', white = '\u001b[37m', blue = '\u001b[34m';
 // Define questions to ask user
 const question1 = {
   name: 'action',
@@ -57,30 +57,41 @@ function initialize() {
 function getSalesData() {
   db.getSalesData()
     .then( res => {
-
       // Create department sales table (nested arrays) with npm 'table' package
       let departments = [[`${blueBG} ID ${blackBG}`, `${blueBG} Department ${blackBG}`, `${blueBG} Overhead Costs ${blackBG}`, `${blueBG} Product Sales ${blackBG}`, `${ blueBG } Total Profit ${ blackBG }`]];
       res.forEach(department => {
         let tableRow = [];
+        let isProfitable = () => parseInt(department.total_profit) > 0; 
         tableRow.push(department.department_id);
         tableRow.push(department.department_name);
-        tableRow.push(`$` + `${department.over_head.costs.toFixed(2)}`.padStart(10));
-        tableRow.push(`$` + `${department.product_sales}`.padStart(10));
-        tableRow.push(`$` + `${department.total_profit}`.padStart(10));
+        tableRow.push(`$` + `${department.over_head_costs.toFixed(2)}`.padStart(14));
+        tableRow.push(`$` + `${department.product_sales.toFixed(2)}`.padStart(14));
+        tableRow.push(`${isProfitable() ? greenBG : redBG}$` + `${department.total_profit.toFixed(2)}`.padStart(14) + `${blackBG}`);
         // Add new row to products array
         departments.push(tableRow);
       });
+      // console.log(departments);
       let tableConfig = {
-        columns: { 0: { alignment: 'right' }, 3: { alignment: 'right' } }
+        columns: { 
+          0: { alignment: 'right' }, 
+          2: { alignment: 'right' },
+          3: { alignment: 'right' },
+          4: { alignment: 'right' },
+        }
       }
       // Print *beautiful* table to the console
       console.log(`\n`);
-      let productTable = table(products, tableConfig);
-      console.log(productTable);
+      let departmentTable = table(departments, tableConfig);
+      console.log(departmentTable);
+      db.disconnect();
     })
 }
 
 function addNewDepartment() {
+
+}
+
+function profitLossFormatting() {
 
 }
 

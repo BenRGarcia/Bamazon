@@ -64,7 +64,6 @@ function _isNewDepartmentDuplicate(newDeptName) { // Passing
       let queryString = 'SELECT * FROM departments';
       _connection.query(queryString, (err, res, fields) => {
         if (err) reject(err);
-        console.log(res);
         let isDuplicate = res.some(dept => dept.department_name === newDeptName);
         resolve(isDuplicate);
       });
@@ -243,12 +242,12 @@ module.exports = Database;
 
 // Instantiate new DB (automatically connect to DB)
 let db = new Database();
-let newDept = {
-  department_name: 'testing123', 
-  over_head_costs: 1000000
+let newOrder = {
+  item_id: 3, 
+  qty: 3
 };
 // Query all products
-db.createNewDepartment(newDept)
+db.placeOrder(newOrder)
 .then( res => {
   console.log(res);
   db.disconnect()

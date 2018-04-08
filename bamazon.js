@@ -1,22 +1,23 @@
 // Require dependencies
 const inquirer = require('inquirer');
-// Require 'Customer' role
+// Require 'Customer', 'Manager', 'Supervisor' roles
 const Customer = require('./bamazonRoles/customer.js');
-// Require 'Manager' role
 const Manager = require('./bamazonRoles/manager.js');
-// Require 'Supervisor' role
 const Supervisor = require('./bamazonRoles/supervisor.js');
 
-// Prompt if a 'customer', 'manager', or 'supervisor'
+// Define question to ask user
+const question = {
+  name: 'role',
+  type: 'list',
+  message: 'Welcome to Bamazon! Choose your role:',
+  choices: ['Customer', 'Manager', 'Supervisor'],
+  default: 0
+};
+
+// Prompt user to select role
 function determineRole() {
   inquirer
-    .prompt({
-      name: 'role',
-      type: 'list',
-      message: 'Welcome to Bamazon! Choose your role:',
-      choices: ['Customer', 'Manager', 'Supervisor'],
-      default: 0
-    })
+    .prompt(question)
     .then(user => {
       switch (user.role.toLowerCase()) {
         case 'customer':
@@ -25,9 +26,11 @@ function determineRole() {
           break;
         case 'manager':
           // const manager = new Manager();
+          // manager.initialize();
           break;
         case 'supervisor':
           // const supervisor = new Supervisor();
+          // supervisor.initialize();
           break;
         default:
           console.log(`Houston, we have a problem. Role '${user.role}' was not recognized.`);

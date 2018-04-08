@@ -3,9 +3,6 @@ require('dotenv').config()
 const keys = require('../config/keys.js');
 // Import database package
 const mysql = require('mysql');
-/**
- *  Private members
- */
 // Set database connection's .env credentials
 const _connection = mysql.createConnection({
   host: keys.mysql.db_host,
@@ -83,9 +80,6 @@ class Database {
       });
     } catch (err) {console.error(err);}
   }
-  /**
-   *  Prototypal methods
-   */
   // Disconnect from database
   disconnect() {
     return _connection.end();

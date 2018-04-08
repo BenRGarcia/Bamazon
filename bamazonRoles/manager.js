@@ -7,50 +7,50 @@ let db;
 // Define variables for ANSI text display styling
 let blueBG = '\u001b[44;1m', blackBG = '\u001b[0m', white = '\u001b[37m', blue = '\u001b[34m';
 // Define questions to ask user
-const question1 = {
+const q1 = {
   name: 'action',
   type: 'list',
   message: 'Which managerial action would you like to perform?',
   choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product', 'Exit'],
   default: 0
 };
-const question2 = {
+const q2 = {
   name: 'item_id',
   type: 'input',
   message: `Please type in the ${blue}ID${white} of the product you wish to increase inventory:`,
   validate: id => !isNaN(id)
 };
-const question3 = {
+const q3 = {
   name: 'qty',
   type: 'input',
   message: `Please type in the ${blue}quantity${white} you wish to increase it by:`,
   validate: id => !isNaN(id)
 };
-const question4 = {
+const q4 = {
   name: 'product_name',
   type: 'input',
   message: `What is the ${blue}name${white} of the new product you would like to add?`
 };
-const question5 = {
+const q5 = {
   name: 'department_name',
   type: 'input',
   message: `What is the ${blue}department${white} of the new product you would like to add?`
 };
-const question6 = {
+const q6 = {
   name: 'price',
   type: 'input',
   message: `What is the ${blue}price${white} of the new product you would like to add?`,
   validate: id => !isNaN(id)
 };
-const question7 = {
+const q7 = {
   name: 'stock_quantity',
   type: 'input',
   message: `What is the ${blue}quantity${white} of the new product you would like to add?`,
   validate: id => !isNaN(id)
 };
 // Aggregate questions
-const addInventoryQuestions = [question2, question3];
-const addNewProductQuestions = [question4, question5, question6, question7];
+const addInventoryQuestions = [q2, q3];
+const addNewProductQuestions = [q4, q5, q6, q7];
 // Manager Class
 class Manager {
   constructor() {
@@ -63,7 +63,7 @@ class Manager {
 // Initializes Manager
 function initialize() {
   inquirer
-    .prompt(question1)
+    .prompt(q1)
       .then(manager => {
         switch (manager.action.toLowerCase()) {
           case 'view products for sale':

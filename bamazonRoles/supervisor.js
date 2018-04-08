@@ -11,17 +11,17 @@ const question1 = {
   name: 'action',
   type: 'list',
   message: 'Which supervisory action would you like to take?',
-  choices: ['View Department Sales','Add New Department']
+  choices: ['View Department Sales','Add New Department', 'Exit']
 };
 const question2 = {
   name: 'department_name',
   type: 'input',
-  message: `What is the ${blue} name ${white} of the new department?`
+  message: `What is the ${blue}name${white} of the new department?`
 };
 const question3 = {
   name: 'over_head_costs',
   type: 'input',
-  message: `What is the ${blue} over head cost ${white} of the new departments?`,
+  message: `What is the ${blue}over head cost${white} of the new departments?`,
   validate: id => !isNaN(id)
 };
 const newDepartmentQuestions = [question2, question3];
@@ -39,12 +39,17 @@ function initialize() {
   inquirer
     .prompt(question1)
     .then( supervisor => {
+      // Clear the terminal upon exit
+      console.reset();
       switch (supervisor.action.toLowerCase()) {
         case 'view department sales':
           getSalesData();
           break;
         case 'add new department':
           addNewDepartment();
+          break;
+        case 'exit':
+          exit();
           break;
         default:
           console.log(`Houston, we have a problem. Supervisor action ${blueBG} '${supervisor.action}' ${blackBG} was not recognized.`);
@@ -59,18 +64,22 @@ function getSalesData() {
     .then( res => {
       // Create department sales table (nested arrays) with npm 'table' package
       let departments = [[`${blueBG} ID ${blackBG}`, `${blueBG} Department ${blackBG}`, `${blueBG} Overhead Costs ${blackBG}`, `${blueBG} Product Sales ${blackBG}`, `${ blueBG } Total Profit ${ blackBG }`]];
-      res.forEach(department => {
+      res.forEach(d => {
         let tableRow = [];
-        let isProfitable = () => parseInt(department.total_profit) > 0; 
-        tableRow.push(department.department_id);
-        tableRow.push(department.department_name);
-        tableRow.push(`$` + `${department.over_head_costs.toFixed(2)}`.padStart(14));
-        tableRow.push(`$` + `${department.product_sales.toFixed(2)}`.padStart(14));
-        tableRow.push(`${isProfitable() ? greenBG : redBG}$` + `${department.total_profit.toFixed(2)}`.padStart(14) + `${blackBG}`);
+        // Conditional formatting for table
+        let isProfitable = () => parseInt(d.total_profit) > 0; 
+        // Process/Normalize data (handle null values from DB)
+        d.product_sales = d.product_sales || 0;
+        d.total_profit = d.total_profit || (d.product_sales - d.over_head_costs);
+        // Compose table rows
+        tableRow.push(d.department_id);
+        tableRow.push(d.department_name);
+        tableRow.push(`$` + `${d.over_head_costs.toFixed(2)}`.padStart(14));
+        tableRow.push(`$` + `${d.product_sales.toFixed(2)}`.padStart(14));
+        tableRow.push(`${isProfitable() ? greenBG : redBG}$${d.total_profit.toFixed(2)}`.padStart(14) + `${blackBG}`);
         // Add new row to products array
         departments.push(tableRow);
       });
-      // console.log(departments);
       let tableConfig = {
         columns: { 
           0: { alignment: 'right' }, 
@@ -83,16 +92,21 @@ function getSalesData() {
       console.log(`\n`);
       let departmentTable = table(departments, tableConfig);
       console.log(departmentTable);
-      db.disconnect();
+      initialize();
     })
 }
 
 function addNewDepartment() {
-
-}
-
-function profitLossFormatting() {
-
+  inquirer
+    .prompt(newDepartmentQuestions)
+    .then(newDepartment => {
+      return db.createNewDepartment(newDepartment);
+    })
+    .then( isCreated => {
+      if (isCreated) console.log(`\n${blueBG}The new department has been created${blackBG}\n`);
+      else console.log(`We're sorry, a department by that name ${blueBG} already exists ${blackBG}.`);
+      initialize();
+    });
 }
 
 // Exit program

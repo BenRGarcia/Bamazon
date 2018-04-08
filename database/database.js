@@ -58,6 +58,21 @@ function _executeQuery(queryString, params = null) { // Passing
   } catch (err) {console.error(err);}
 }
 
+// Tests if 'new' department name is actually a duplicate
+function _isNewDepartmentDuplicate(newDeptName) { // Passing
+  try {
+    return new Promise((resolve, reject) => {
+      let queryString = 'SELECT * FROM departments';
+      _connection.query(queryString, (err, res, fields) => {
+        if (err) reject(err);
+        console.log(res);
+        let isDuplicate = res.some(dept => dept.department_name === newDeptName);
+        resolve(isDuplicate);
+      });
+    });
+  } catch (err) {console.error(err);}
+}
+
 /**
  *  Database Class Contructor
  */
@@ -204,10 +219,17 @@ class Database {
         // Define MySQL query to add new department
         let queryString = 'INSERT INTO departments SET ?',
           params = { department_name, over_head_costs };
-        // Perform query to add new department
-        _executeQuery(queryString, params)
-          .then(res => resolve(res))
-          .catch(err => reject(err));
+        // Make certain department name is lower case
+        params.department_name = params.department_name.toLowerCase();
+        // Check if new department name is a duplicate
+        _isNewDepartmentDuplicate(params.department_name).then( isDuplicate => {
+          // Resolve promise if 'new' dept is a duplicate
+          if (isDuplicate) resolve(!isDuplicate);
+          // Otherwise, perform query to add new department
+          _executeQuery(queryString, params)
+            .then(res => resolve(res))
+            .catch(err => reject(err));
+        });
       });
     } catch (err) {console.error(err);}
   }
@@ -221,9 +243,12 @@ module.exports = Database;
 
 // Instantiate new DB (automatically connect to DB)
 let db = new Database();
-
+let newDept = {
+  department_name: 'Sporting Goods',
+  over_head_costs: 6666.66
+};
 // Query all products
-db.getSalesData()
+db.createNewDepartment(newDept)
 .then( res => {
   console.log(res);
   db.disconnect()

@@ -16,7 +16,6 @@ const _connection = mysql.createConnection({
   password: keys.mysql.db_pass,
   database: keys.mysql.db_name,
 });
-
 // Check if in-stock qty is sufficient to fulfill order
 function _isInStock(product, order) {
   return product.stock_quantity >= order.qty;
@@ -26,7 +25,7 @@ function _calculateTotalCost(product, order) {
   return product.price * order.qty;
 }
 // Executes validated order processing
-function _processOrder(product, order) {
+function _processOrder(product, order) { // Passing
   try {
     return new Promise((resolve, reject) => {
       // Calculate, store value of order'a total cost
@@ -43,12 +42,10 @@ function _processOrder(product, order) {
         .then(res => resolve(res))
         .catch(err => reject(err));
     });
-  } catch (err) {
-    console.error(err);
-  }
+  } catch (err) {console.error(err);}
 }
 // Executes MySQL queries
-function _executeQuery(queryString, params = null) {
+function _executeQuery(queryString, params = null) { // Passing
   try {
     return new Promise((resolve, reject) => {
       _connection.query(queryString, params, (err, res, fields) => {
@@ -58,9 +55,7 @@ function _executeQuery(queryString, params = null) {
         resolve(res);
       });
     });
-  } catch (err) {
-    console.error(err);
-  }
+  } catch (err) {console.error(err);}
 }
 
 /**
@@ -75,9 +70,7 @@ class Database {
         if (err) throw err;
         console.log(`MySQL connected as id: ${_connection.threadId}`);
       });
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {console.error(err);}
   }
   /**
    *  Prototypal methods
@@ -97,9 +90,7 @@ class Database {
           .then(res => resolve(res))
           .catch(err => reject(err));
       });
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {console.error(err);}
   }
   // A function that receives customer orders
   placeOrder({ item_id, qty }) { // Passing
@@ -120,9 +111,7 @@ class Database {
           })
           .catch(err => reject(err));
       });
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {console.error(err);}
   }
   // Gets low inventory items based on given Qty
   getLowInventory(lowQty) { // Passing
@@ -137,37 +126,24 @@ class Database {
           })
           .catch(err => reject(err));
       });
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {console.error(err);}
   }
   // Adds additional qty to a product
   addInventory({ item_id, qty }) { // Passing
-    console.log(`inside database.js addInventory(), line 146`);
-    console.log(`The item_id is ${item_id}`);
-    console.log(`The qty is ${qty}`);
     try {
       return new Promise((resolve, reject) => {
         // Define variables with DB values to return product
         let queryString = 'SELECT * FROM products WHERE ?',
           param = { item_id };
-        console.log(`Param is:`);
-        console.log(param);
         // Get the initial qty of product...
         _executeQuery(queryString, param)
           // ...then add additional qty
           .then(res => {
-            console.log(`The result of the product query is:`);
-            console.log(res);
             // Define MySQL query to update product data
             let queryString = 'UPDATE products SET ? WHERE ?',
               // Define variables with DB values to update
               stock_quantity = res[0].stock_quantity + qty,
               params = [{ stock_quantity }, { item_id }];
-            console.log(`Inside the inner .then() statement:`);
-            console.log(`item_id: ${item_id}`);
-            console.log(`stock_quantity: ${stock_quantity}, params:`);
-            console.log(params);
               // Execute query to update DB
               _executeQuery(queryString, params)
                 .then(res => resolve(res))
@@ -175,9 +151,7 @@ class Database {
           })
           .catch(err => {throw err});
       });
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {console.error(err);}
   }
   // Adds new product to the store
   addNewProduct({ product_name, department_name, price, stock_quantity }) {
@@ -191,15 +165,13 @@ class Database {
           .then(res => resolve(res))
           .catch(err => reject(err));
       });
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {console.error(err);}
   }
   // Get sales data by department (left join)
   getSalesData() {
     try {
       return new Promise((resolve, reject) => {
-        let productCols = 'department_name, product_sales',
+        let productCols = 'products.department_name, products.product_sales',
           join = 'products.department_name = departments.department_name',
           queryString = `SELECT ${productCols} FROM products LEFT JOIN departments ON ${join}`;
         // Perform query with left join to compose sales data
@@ -207,9 +179,7 @@ class Database {
           .then(res => resolve(res))
           .catch(err => reject(err));
       });
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {console.error(err);}
   }
   // An async function that creates a new department
   createNewDepartment({ department_name, over_head_costs }) {
@@ -223,9 +193,7 @@ class Database {
           .then(res => resolve(res))
           .catch(err => reject(err));
       });
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {console.error(err);}
   }
 }
 
@@ -238,14 +206,25 @@ module.exports = Database;
 // Instantiate new DB (automatically connect to DB)
 let db = new Database();
 
-const inventory = {
-  item_id: 1,
-  qty: 9
-};
-
 // Query all products
-db.addInventory(inventory)
+db.getSalesData()
 .then( res => {
   console.log(res);
   db.disconnect()
 });
+
+
+/* The secret sauce
+SELECT
+    departments.department_id,
+    products.department_name,
+    departments.over_head_costs,
+    SUM(products.product_sales) AS 'product_sales',
+    SUM(products.product_sales) - departments.over_head_costs AS 'total_profit'
+FROM
+	products
+INNER JOIN
+	departments
+ON (products.department_name = departments.department_name)
+GROUP BY department_id;
+ */

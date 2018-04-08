@@ -83,6 +83,7 @@ function initialize() {
             break;
           default:
             console.log(`Houston, we have a problem. Manager action ${blueBG} '${manager.action}' ${blackBG} was not recognized.`);
+            initialize();
             break;
         }
       })

@@ -5,6 +5,9 @@ const Customer = require('./bamazonRoles/customer.js');
 const Manager = require('./bamazonRoles/manager.js');
 const Supervisor = require('./bamazonRoles/supervisor.js');
 
+// Define variables for ANSI text display styling
+let blueBG = '\u001b[44;1m', blackBG = '\u001b[0m', white = '\u001b[37m', blue = '\u001b[34m';
+
 // A function that clears the terminal, resets the cursor
 console.reset = () => process.stdout.write('\x1B[2J\x1B[0f\u001b[0;0H');
 
@@ -38,7 +41,7 @@ function determineRole() {
           supervisor.initialize();
           break;
         default:
-          console.log(`Houston, we have a problem. Role '${user.role}' was not recognized.`);
+          console.log(`Houston, we have a problem. Role ${blueBG} '${user.role}' ${blackBG} was not recognized.`);
           break;
       }
     });

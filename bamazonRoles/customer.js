@@ -59,7 +59,10 @@ function initialize() {
   customer.getProducts()
     .then( res => {
       // console.log(res);
-      let products = [['ID','Product','Price']];
+      // http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
+      let blueBG = '\u001b[44;1m';
+      let blackBG = '\u001b[0m';
+      let products = [[`${blueBG} ID ${blackBG}`, `${blueBG} Product ${blackBG}`,`${blueBG} Price ${blackBG}`]];
       // let products = res.map(p => `ID: ${p.item_id} ${p.product_name} $${p.price.toFixed(2)}`);
       res.forEach(product => {
         let tableRow = [];

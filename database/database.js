@@ -23,7 +23,7 @@ function _calculateTotalCost(product, order) {
   return product.price * order.qty;
 }
 // Executes validated order processing
-function _processOrder(product, order) { // Passing
+function _processOrder(product, order) {
   try {
     return new Promise((resolve, reject) => {
       // Calculate, store value of order'a total cost
@@ -45,7 +45,7 @@ function _processOrder(product, order) { // Passing
   } catch (err) {console.error(err);}
 }
 // Executes MySQL queries
-function _executeQuery(queryString, params = null) { // Passing
+function _executeQuery(queryString, params = null) {
   try {
     return new Promise((resolve, reject) => {
       _connection.query(queryString, params, (err, res, fields) => {
@@ -58,7 +58,7 @@ function _executeQuery(queryString, params = null) { // Passing
   } catch (err) {console.error(err);}
 }
 // Tests if 'new' department name is actually a duplicate
-function _isNewDepartmentDuplicate(newDeptName) { // Passing
+function _isNewDepartmentDuplicate(newDeptName) {
   try {
     return new Promise((resolve, reject) => {
       let queryString = 'SELECT * FROM departments';
@@ -74,7 +74,7 @@ function _isNewDepartmentDuplicate(newDeptName) { // Passing
  *  Database Class Contructor
  */
 class Database {
-  constructor() { // Passing
+  constructor() {
     // Connect to DB upon instantiation
     try {
       _connection.connect( err => {
@@ -87,11 +87,11 @@ class Database {
    *  Prototypal methods
    */
   // Disconnect from database
-  disconnect() { // Passing
+  disconnect() {
     return _connection.end();
   }
   // Returns all available products
-  getAllProducts() { // Passing
+  getAllProducts() {
     try {
       return new Promise((resolve, reject) => {
         // Set query definition
@@ -104,7 +104,7 @@ class Database {
     } catch (err) {console.error(err);}
   }
   // A function that receives customer orders
-  placeOrder({ item_id, qty }) { // Passing
+  placeOrder({ item_id, qty }) {
     let order = { item_id, qty };
     try {
       return new Promise((resolve, reject) => {
@@ -125,7 +125,7 @@ class Database {
     } catch (err) {console.error(err);}
   }
   // Gets low inventory items based on given Qty
-  getLowInventory(lowQty) { // Passing
+  getLowInventory(lowQty) {
     try {
       return new Promise((resolve, reject) => {
         // Get all products in database
@@ -140,7 +140,7 @@ class Database {
     } catch (err) {console.error(err);}
   }
   // Adds additional qty to a product
-  addInventory({ item_id, qty }) { // Passing
+  addInventory({ item_id, qty }) {
     try {
       return new Promise((resolve, reject) => {
         // Define variables with DB values to return product
@@ -179,7 +179,7 @@ class Database {
     } catch (err) {console.error(err);}
   }
   // Get sales data by department (JOIN)
-  getSalesData() { // Passing
+  getSalesData() {
     // Define parameters of DB query
     let columns = 
         `departments.department_id,
@@ -209,7 +209,7 @@ class Database {
     } catch (err) {console.error(err);}
   }
   // An async function that creates a new department
-  createNewDepartment({ department_name, over_head_costs }) { // Passing
+  createNewDepartment({ department_name, over_head_costs }) {
     try {
       return new Promise((resolve, reject) => {
         // Define MySQL query to add new department
@@ -235,20 +235,3 @@ class Database {
 }
 
 module.exports = Database;
-
-/**
- *  Testing below
- */
-
-// Instantiate new DB (automatically connect to DB)
-let db = new Database();
-let newOrder = {
-  item_id: 3, 
-  qty: 3
-};
-// Query all products
-db.placeOrder(newOrder)
-.then( res => {
-  console.log(res);
-  db.disconnect()
-});

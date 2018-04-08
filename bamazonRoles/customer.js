@@ -1,6 +1,7 @@
 // Require dependencies
 const inquirer = require('inquirer');
 const Database = require('../database/database.js');
+const { table } = require('table');
 
 // Create global access to DB object if customer instantiated
 let db;
@@ -57,13 +58,26 @@ function initialize() {
   const customer = new Customer();
   customer.getProducts()
     .then( res => {
-      console.log(res);
+      // console.log(res);
+      let products = [['ID','Product','Price']];
       // let products = res.map(p => `ID: ${p.item_id} ${p.product_name} $${p.price.toFixed(2)}`);
-      let products = res.map(product => {
-        
+      res.forEach(product => {
+        let tableRow = [];
+        tableRow.push(product.item_id);
+        tableRow.push(product.product_name);
+        tableRow.push(`$` + `${product.price.toFixed(2)}`.padStart(10));
+        products.push(tableRow);
       });
-      console.log(products);
-      // promptPurchase(products);
+      let tableConfig = {
+        columns: {
+          0: {
+            alignment: 'right'
+          }
+        }
+      }
+      let productTable = table(products, tableConfig);
+      console.log(productTable);
+      promptPurchase(products);
     });
 }
 // Asks which product to buy

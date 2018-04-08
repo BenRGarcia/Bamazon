@@ -102,7 +102,7 @@ function viewProducts() {
         let tableRow = [];
         tableRow.push(product.item_id);
         tableRow.push(product.product_name);
-        tableRow.push(`$` + `${product.price.toLocaleString('en', dollarsFormat)}`.padStart(10));
+        tableRow.push(`$` + `${product.price.toLocaleString('en', dollarsFormat)}`.padStart(11));
         tableRow.push(product.stock_quantity);
         // Add new row to products array
         products.push(tableRow);
@@ -134,7 +134,7 @@ function viewLowInventory() {
         let tableRow = [];
         tableRow.push(product.item_id);
         tableRow.push(product.product_name);
-        tableRow.push(`$` + `${product.price.toFixed(2)}`.padStart(10));
+        tableRow.push(`$` + `${product.price.toLocaleString('en', dollarsFormat)}`.padStart(11));
         tableRow.push(product.stock_quantity);
         // Add new row to products array
         products.push(tableRow);

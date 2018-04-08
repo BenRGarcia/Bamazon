@@ -60,7 +60,7 @@ function initialize() {
         let tableRow = [];
         tableRow.push(product.item_id);
         tableRow.push(product.product_name);
-        tableRow.push(`$` + `${product.price.toLocaleString('en', dollarsFormat)}`.padStart(10));
+        tableRow.push(`$` + `${product.price.toLocaleString('en', dollarsFormat)}`.padStart(11));
         // Add new row to products array
         products.push(tableRow);
       });

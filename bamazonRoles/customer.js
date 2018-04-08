@@ -7,8 +7,15 @@ const { table } = require('table');
 let db;
 let customer;
 
+// Define variables for ANSI text styling
+// http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
+let blueBG = '\u001b[44;1m';
+let blackBG = '\u001b[0m';
+let white = '\u001b[37m';
+let blue = '\u001b[34m';
+
 // A function that clears the screen
-console.reset = () => process.stdout.write('\033c');
+console.reset = () => process.stdout.write('\x1B[2J\x1B[0f\u001b[0;0H');
 
 // Handle when order is successful
 function _orderSuccessful(order) {
@@ -66,9 +73,6 @@ function initialize() {
   customer = new Customer();
   customer.getProducts()
     .then( res => {
-      // http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
-      let blueBG = '\u001b[44;1m';
-      let blackBG = '\u001b[0m';
       let products = [[`${blueBG} ID ${blackBG}`, `${blueBG} Product ${blackBG}`,`${blueBG} Price ${blackBG}`]];
       // let products = res.map(p => `ID: ${p.item_id} ${p.product_name} $${p.price.toFixed(2)}`);
       res.forEach(product => {
@@ -97,13 +101,13 @@ function promptPurchase(products) {
       {
         name: 'item_id',
         type: 'input',
-        message: 'Please type in the ID of the product you wish to buy:',
+        message: `Please type in the ${blue}ID${white} of the product you wish to buy:`,
         validate: id => !isNaN(id)
       },
       {
         name: 'qty',
         type: 'input',
-        message: 'Please type in the quantity you wish to purchase:',
+        message: `Please type in the ${blue}quantity${white} you wish to purchase:`,
         validate: id => !isNaN(id)
       }
     ])
@@ -116,7 +120,7 @@ function promptPurchase(products) {
       // Log results of order
       .then(orderSuccess => {
         console.log(orderSuccess);
-        console.log(`Thank you for shopping at Bamazon!`);
+        console.log(`Thank you for shopping at ${blueBG}Bamazon${blackBG}!`);
         db.disconnect();
         return orderSuccess;
       })

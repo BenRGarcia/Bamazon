@@ -1,56 +1,75 @@
-// Require database module
-let Database = require('../database/database.js');
+// Require dependencies
+const inquirer = require('inquirer');
+const Database = require('../database/database.js');
 
+// Create global access to DB object if customer instantiated
+let db;
 
-// 1) Display all available products for purchase
-// 2) Which product would you like to buy? (Product ID number)
-// 3) How many units would you like to buy?
-
+// Handle when order is successful
+function _orderSuccessful(order) {
+  return `We have processed your order for ${order.qty} ${order.product}(s).\nYour total comes to $${order.totalCost.toFixed(2)}`;
+}
+// Handle when order is unsuccessful
+function _orderUnsuccessful() {
+  return `We're sorry, we don't have enough stock to fulfill that order.`;
+}
+// Customer Class Constructor
 class Customer {
   // When new customer instantiated...
   constructor() {
-    // ...instantiate database object...
-    let db = new Database();
-    // ...and connect to database
-    db.connect().then( () => {
-      console.log(`The customer has connected to the database`);
-      // Initialize prompts from here?
-    }, err => console.error(err));
+    // ...instantiate database object
+    db = new Database();
   }
-  async showProducts() {
-    return await db.getAllProducts()
-    .then( res => {
-      console.log(`customer.js -> showProducts response:`);
-      console.log(res);
-    })
-    .catch( err => console.error(err) );
+  // A function that will get all products from the DB
+  getProducts() { // Passing
+    return new Promise( (resolve, reject) => {
+      db.getAllProducts()
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => reject(err));
+    });
   }
   // Buy product
-  async buyProduct(item_id, qty) {
-    // Compose order object
-    let order = { item_id, qty };
-    return await db.placeOrder(order)
-    .then( order => {
-
-      let orderSuccessful = function() {
-        console.log(`We have processed your. The total comes to ${order.totalCost}`);
-        db.disconnect();
-      }
-
-      let orderUnsuccessful = function() {
-        console.log(`We're sorry, we don't have enough stock to fulfill that order.`);
-        db.disconnect();
-      }
-      return order ? orderSuccessful() : orderUnsuccessful();
-    })
-    .catch( err => console.error(err) );
+  buyProduct(item_id, qty) { // Passing
+    return new Promise( (resolve, reject) => {
+      // Compose order object
+      let order = { item_id, qty };
+      // Place order
+      db.placeOrder(order)
+        .then(response => {
+          return response ? resolve(_orderSuccessful(response)) : resolve(_orderUnsuccessful(response));
+        })
+        .catch(err => reject(err));
+    });
   }
 }
 
-// module.exports = Customer;
+module.exports = Customer;
 
 /**
- *  TESTING BELOW
+ *  Begin logic for questions
  */
-
-// Create new customer object (which also creates/connects DB)
+// Initialize module
+initialize();
+// Instantiates customer object
+function initialize() {
+  const customer = new Customer();
+  customer.getProducts()
+    .then( res => {
+      console.log(res);
+      // let products = res.map(p => `ID: ${p.item_id} ${p.product_name} $${p.price.toFixed(2)}`);
+      let products = res.map(product => {
+        
+      });
+      console.log(products);
+      // promptPurchase(products);
+    });
+}
+// Asks which product to buy
+function promptPurchase(products) {
+/*   inquirer
+    .prompt()
+    .then(choice => {
+    }); */
+}

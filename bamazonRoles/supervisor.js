@@ -66,17 +66,18 @@ function getSalesData() {
       let departments = [[`${blueBG} ID ${blackBG}`, `${blueBG} Department ${blackBG}`, `${blueBG} Overhead Costs ${blackBG}`, `${blueBG} Product Sales ${blackBG}`, `${ blueBG } Total Profit ${ blackBG }`]];
       res.forEach(d => {
         let tableRow = [];
-        // Conditional formatting for table
-        let isProfitable = () => parseInt(d.total_profit) > 0; 
+        // Formatting for table
+        let isProfitable = () => parseInt(d.total_profit) > 0;
+        let dollarsFormat = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
         // Process/Normalize data (handle null values from DB)
         d.product_sales = d.product_sales || 0;
         d.total_profit = d.total_profit || (d.product_sales - d.over_head_costs);
         // Compose table rows
         tableRow.push(d.department_id);
         tableRow.push(d.department_name);
-        tableRow.push(`$` + `${d.over_head_costs.toLocaleString('en')}`.padStart(14));
-        tableRow.push(`$` + `${d.product_sales.toLocaleString('en')}`.padStart(14));
-        tableRow.push(`${isProfitable() ? greenBG : redBG}$` + `${d.total_profit.toLocaleString('en')}`.padStart(14) + `${blackBG}`);
+        tableRow.push(`$` + `${d.over_head_costs.toLocaleString('en', dollarsFormat)}`.padStart(14));
+        tableRow.push(`$` + `${d.product_sales.toLocaleString('en', dollarsFormat)}`.padStart(14));
+        tableRow.push(`${isProfitable() ? greenBG : redBG}$` + `${d.total_profit.toLocaleString('en', dollarsFormat)}`.padStart(14) + `${blackBG}`);
         // Add new row to products array
         departments.push(tableRow);
       });

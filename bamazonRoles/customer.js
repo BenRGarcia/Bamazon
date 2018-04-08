@@ -7,6 +7,9 @@ const { table } = require('table');
 let db;
 let customer;
 
+// A function that clears the screen
+console.reset = () => process.stdout.write('\033c');
+
 // Handle when order is successful
 function _orderSuccessful(order) {
   return `We have processed your order for ${order.qty} ${order.product}(s).\nYour total comes to $${order.totalCost.toFixed(2)}`;
@@ -56,10 +59,13 @@ module.exports = Customer;
 initialize();
 // Instantiates customer object
 function initialize() {
+  // Clear the terminal
+  console.reset();
+  console.log(`\n`);
+  // Instantiate new customer
   customer = new Customer();
   customer.getProducts()
     .then( res => {
-      // console.log(res);
       // http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
       let blueBG = '\u001b[44;1m';
       let blackBG = '\u001b[0m';

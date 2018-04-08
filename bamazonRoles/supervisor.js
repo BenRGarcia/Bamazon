@@ -7,25 +7,25 @@ let db;
 // Define variables for ANSI text display styling
 let blueBG = '\u001b[44;1m', blackBG = '\u001b[0m', redBG = '\u001b[41;1m', greenBG = '\u001b[42;1m', white = '\u001b[37m', blue = '\u001b[34m';
 // Define questions to ask user
-const question1 = {
+const q1 = {
   name: 'action',
   type: 'list',
   message: 'Which supervisory action would you like to take?',
   choices: ['View Department Sales','Add New Department', 'Exit']
 };
-const question2 = {
+const q2 = {
   name: 'department_name',
   type: 'input',
   message: `What is the ${blue}name${white} of the new department?`
 };
-const question3 = {
+const q3 = {
   name: 'over_head_costs',
   type: 'input',
   message: `What is the ${blue}over head cost${white} of the new departments?`,
   validate: id => !isNaN(id)
 };
-const newDepartmentQuestions = [question2, question3];
-
+const newDepartmentQuestions = [q2, q3];
+// Supervisor class
 class Supervisor {
   constructor() {
     db = new Database();
@@ -34,12 +34,12 @@ class Supervisor {
     initialize();
   }
 }
-
+// Initialize supervisor
 function initialize() {
   inquirer
-    .prompt(question1)
+    .prompt(q1)
     .then( supervisor => {
-      // Clear the terminal upon exit
+      // Clear the terminal
       console.reset();
       switch (supervisor.action.toLowerCase()) {
         case 'view department sales':
@@ -58,7 +58,7 @@ function initialize() {
       }
     });
 }
-
+// Retrieve department sales data
 function getSalesData() {
   db.getSalesData()
     .then( res => {
@@ -95,7 +95,7 @@ function getSalesData() {
       initialize();
     })
 }
-
+// Create a new department
 function addNewDepartment() {
   inquirer
     .prompt(newDepartmentQuestions)
@@ -108,7 +108,6 @@ function addNewDepartment() {
       initialize();
     });
 }
-
 // Exit program
 function exit() {
   db.disconnect();

@@ -86,7 +86,7 @@ function initialize() {
             initialize();
             break;
         }
-      })
+      });
 }
 // View all products
 function viewProducts() {

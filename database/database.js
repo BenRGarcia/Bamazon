@@ -3,11 +3,9 @@ require('dotenv').config()
 const keys = require('../config/keys.js');
 // Import database package
 const mysql = require('mysql');
-
 /**
  *  Private members
  */
-
 // Set database connection's .env credentials
 const _connection = mysql.createConnection({
   host: keys.mysql.db_host,
@@ -30,6 +28,8 @@ function _processOrder(product, order) { // Passing
     return new Promise((resolve, reject) => {
       // Calculate, store value of order'a total cost
       order.totalCost = _calculateTotalCost(product, order);
+      // Add product name property to order object
+      order.product = product.product_name;
       // Define variables with DB values to update
       let stock_quantity = product.stock_quantity - order.qty,
         product_sales = product.product_sales + order.totalCost,
@@ -39,7 +39,7 @@ function _processOrder(product, order) { // Passing
         params = [{ stock_quantity, product_sales }, { item_id }];
       // Send query to decrease qty and add profit to DB...
       _executeQuery(queryString, params)
-        .then(res => resolve(res))
+        .then(res => resolve(order))
         .catch(err => reject(err));
     });
   } catch (err) {console.error(err);}
@@ -57,7 +57,6 @@ function _executeQuery(queryString, params = null) { // Passing
     });
   } catch (err) {console.error(err);}
 }
-
 // Tests if 'new' department name is actually a duplicate
 function _isNewDepartmentDuplicate(newDeptName) { // Passing
   try {
@@ -72,13 +71,11 @@ function _isNewDepartmentDuplicate(newDeptName) { // Passing
     });
   } catch (err) {console.error(err);}
 }
-
 /**
  *  Database Class Contructor
  */
-
 class Database {
-  constructor() {
+  constructor() { // Passing
     // Connect to DB upon instantiation
     try {
       _connection.connect( err => {
@@ -91,7 +88,7 @@ class Database {
    *  Prototypal methods
    */
   // Disconnect from database
-  disconnect() {
+  disconnect() { // Passing
     return _connection.end();
   }
   // Returns all available products
@@ -213,7 +210,7 @@ class Database {
     } catch (err) {console.error(err);}
   }
   // An async function that creates a new department
-  createNewDepartment({ department_name, over_head_costs }) {
+  createNewDepartment({ department_name, over_head_costs }) { // Passing
     try {
       return new Promise((resolve, reject) => {
         // Define MySQL query to add new department
@@ -224,11 +221,14 @@ class Database {
         // Check if new department name is a duplicate
         _isNewDepartmentDuplicate(params.department_name).then( isDuplicate => {
           // Resolve promise if 'new' dept is a duplicate
-          if (isDuplicate) resolve(!isDuplicate);
+          if (isDuplicate) {resolve(!isDuplicate)}
           // Otherwise, perform query to add new department
-          _executeQuery(queryString, params)
-            .then(res => resolve(res))
-            .catch(err => reject(err));
+          else {
+            _executeQuery(queryString, params)
+              .then(res => resolve(res))
+              .catch(err => reject(err));
+          }
+
         });
       });
     } catch (err) {console.error(err);}
@@ -244,8 +244,8 @@ module.exports = Database;
 // Instantiate new DB (automatically connect to DB)
 let db = new Database();
 let newDept = {
-  department_name: 'Sporting Goods',
-  over_head_costs: 6666.66
+  department_name: 'testing123', 
+  over_head_costs: 1000000
 };
 // Query all products
 db.createNewDepartment(newDept)

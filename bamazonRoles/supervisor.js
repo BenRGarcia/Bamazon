@@ -14,20 +14,17 @@ const question1 = {
   choices: ['View Department Sales','Add New Department']
 };
 const question2 = {
-  name: '',
-  type: '',
-  message: '',
+  name: 'department_name',
+  type: 'input',
+  message: `What is the ${blue} name ${white} of the new department?`
 };
 const question3 = {
-  name: '',
-  type: '',
-  message: '',
+  name: 'over_head_costs',
+  type: 'input',
+  message: `What is the ${blue} over head cost ${white} of the new departments?`,
+  validate: id => !isNaN(id)
 };
-const question4 = {
-  name: '',
-  type: '',
-  message: '',
-};
+const newDepartmentQuestions = [question2, question3];
 
 class Supervisor {
   constructor() {
@@ -58,11 +55,33 @@ function initialize() {
 }
 
 function getSalesData() {
+  db.getSalesData()
+    .then( res => {
 
+      // Create department sales table (nested arrays) with npm 'table' package
+      let departments = [[`${blueBG} ID ${blackBG}`, `${blueBG} Department ${blackBG}`, `${blueBG} Overhead Costs ${blackBG}`, `${blueBG} Product Sales ${blackBG}`, `${ blueBG } Total Profit ${ blackBG }`]];
+      res.forEach(department => {
+        let tableRow = [];
+        tableRow.push(department.department_id);
+        tableRow.push(department.department_name);
+        tableRow.push(`$` + `${department.over_head.costs.toFixed(2)}`.padStart(10));
+        tableRow.push(`$` + `${department.product_sales}`.padStart(10));
+        tableRow.push(`$` + `${department.total_profit}`.padStart(10));
+        // Add new row to products array
+        departments.push(tableRow);
+      });
+      let tableConfig = {
+        columns: { 0: { alignment: 'right' }, 3: { alignment: 'right' } }
+      }
+      // Print *beautiful* table to the console
+      console.log(`\n`);
+      let productTable = table(products, tableConfig);
+      console.log(productTable);
+    })
 }
 
 function addNewDepartment() {
-  
+
 }
 
 // Exit program

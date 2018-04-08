@@ -74,9 +74,9 @@ function getSalesData() {
         // Compose table rows
         tableRow.push(d.department_id);
         tableRow.push(d.department_name);
-        tableRow.push(`$` + `${d.over_head_costs.toFixed(2)}`.padStart(14));
-        tableRow.push(`$` + `${d.product_sales.toFixed(2)}`.padStart(14));
-        tableRow.push(`${isProfitable() ? greenBG : redBG}$${d.total_profit.toFixed(2)}`.padStart(14) + `${blackBG}`);
+        tableRow.push(`$` + `${d.over_head_costs.toLocaleString('en')}`.padStart(14));
+        tableRow.push(`$` + `${d.product_sales.toLocaleString('en')}`.padStart(14));
+        tableRow.push(`${isProfitable() ? greenBG : redBG}$` + `${d.total_profit.toLocaleString('en')}`.padStart(14) + `${blackBG}`);
         // Add new row to products array
         departments.push(tableRow);
       });

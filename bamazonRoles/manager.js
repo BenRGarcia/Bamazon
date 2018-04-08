@@ -87,7 +87,6 @@ function initialize() {
             break;
         }
       })
-      .catch(err => {throw err});
 }
 // View all products
 function viewProducts() {

@@ -4,27 +4,15 @@ const Database = require('../database/database.js');
 const { table } = require('table');
 
 // Create global access to DB and Customer object if customer instantiated
-let db;
-let customer;
+let db, customer;
 
-// Define variables for ANSI text styling
-// http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
-let blueBG = '\u001b[44;1m';
-let blackBG = '\u001b[0m';
-let white = '\u001b[37m';
-let blue = '\u001b[34m';
+// Define variables for ANSI text display styling
+let 
+  blueBG = '\u001b[44;1m',
+  blackBG = '\u001b[0m',
+  white = '\u001b[37m',
+  blue = '\u001b[34m';
 
-// A function that clears the screen
-console.reset = () => process.stdout.write('\x1B[2J\x1B[0f\u001b[0;0H');
-
-// Handle when order is successful
-function _orderSuccessful(order) {
-  return `We have processed your order for ${order.qty} ${order.product}(s).\nYour total comes to $${order.totalCost.toFixed(2)}`;
-}
-// Handle when order is unsuccessful
-function _orderUnsuccessful() {
-  return `We're sorry, we don't have enough stock to fulfill that order.`;
-}
 // Customer Class Constructor
 class Customer {
   // When new customer instantiated...
@@ -56,25 +44,27 @@ class Customer {
     });
   }
 }
-
-module.exports = Customer;
-
-/**
- *  Begin logic for questions
- */
-// Initialize module
-initialize();
+// A function that clears the terminal, resets the cursor
+console.reset = () => process.stdout.write('\x1B[2J\x1B[0f\u001b[0;0H');
+// Handle when order is successful
+function _orderSuccessful(order) {
+  return `We have processed your order for ${order.qty} ${order.product}(s).\nYour total comes to $${order.totalCost.toFixed(2)}`;
+}
+// Handle when order is unsuccessful
+function _orderUnsuccessful() {
+  return `We're sorry, we don't have enough stock to fulfill that order.`;
+}
 // Instantiates customer object
 function initialize() {
   // Clear the terminal
   console.reset();
-  console.log(`\n`);
   // Instantiate new customer
   customer = new Customer();
+  // Retrieve all products from the DB
   customer.getProducts()
     .then( res => {
+      // Create product table with npm 'table' package
       let products = [[`${blueBG} ID ${blackBG}`, `${blueBG} Product ${blackBG}`,`${blueBG} Price ${blackBG}`]];
-      // let products = res.map(p => `ID: ${p.item_id} ${p.product_name} $${p.price.toFixed(2)}`);
       res.forEach(product => {
         let tableRow = [];
         tableRow.push(product.item_id);
@@ -89,8 +79,11 @@ function initialize() {
           }
         }
       }
+      // Print *beautiful* table to the console
+      console.log(`\n`);
       let productTable = table(products, tableConfig);
       console.log(productTable);
+      // Ask customer to purchase
       promptPurchase(products);
     });
 }
@@ -126,3 +119,5 @@ function promptPurchase(products) {
       })
       .catch( err => {throw err});
 }
+
+module.exports = Customer;

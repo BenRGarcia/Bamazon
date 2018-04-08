@@ -177,7 +177,7 @@ class Database {
     // Define parameters of DB query
     let columns = 
         `departments.department_id,
-        products.department_name,
+        departments.department_name,
         departments.over_head_costs,
         SUM(products.product_sales) AS 'product_sales',
         SUM(products.product_sales) - departments.over_head_costs AS 'total_profit'`,
@@ -190,7 +190,7 @@ class Database {
                       ${columns} 
                     FROM 
                       ${thisTable} 
-                        INNER JOIN 
+                        RIGHT JOIN 
                       ${withThisTable} ON ${relation} 
                     GROUP BY ${category}`;
     try {

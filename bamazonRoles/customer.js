@@ -101,11 +101,11 @@ function buyProduct(item_id, qty) {
 }
 // Handle if order is successful
 function _orderSuccessful(order) {
-  return `We have processed your order for ${order.qty} ${order.product}(s).\nYour total comes to $${order.totalCost.toFixed(2)}`;
+  return `\n${blueBG} We have processed your order for ${order.qty} ${order.product}(s) ${blackBG}.\n\nYour total comes to ${blueBG} $${order.totalCost.toFixed(2)} ${blackBG}\n`;
 }
 // Handle if order is unsuccessful
 function _orderUnsuccessful() {
-  return `We're sorry, we don't have enough stock to fulfill that order.`;
+  return `\n${blueBG} We're sorry, we don't have enough stock to fulfill that order.${blackBG}\n`;
 }
 
 module.exports = Customer;

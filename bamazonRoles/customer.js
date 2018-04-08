@@ -3,8 +3,9 @@ const inquirer = require('inquirer');
 const Database = require('../database/database.js');
 const { table } = require('table');
 
-// Create global access to DB object if customer instantiated
+// Create global access to DB and Customer object if customer instantiated
 let db;
+let customer;
 
 // Handle when order is successful
 function _orderSuccessful(order) {
@@ -55,7 +56,7 @@ module.exports = Customer;
 initialize();
 // Instantiates customer object
 function initialize() {
-  const customer = new Customer();
+  customer = new Customer();
   customer.getProducts()
     .then( res => {
       // console.log(res);
@@ -85,8 +86,33 @@ function initialize() {
 }
 // Asks which product to buy
 function promptPurchase(products) {
-/*   inquirer
-    .prompt()
-    .then(choice => {
-    }); */
+  inquirer
+    .prompt([
+      {
+        name: 'item_id',
+        type: 'input',
+        message: 'Please type in the ID of the product you wish to buy:',
+        validate: id => !isNaN(id)
+      },
+      {
+        name: 'qty',
+        type: 'input',
+        message: 'Please type in the quantity you wish to purchase:',
+        validate: id => !isNaN(id)
+      }
+    ])
+      // Place customer order
+      .then(purchase => {
+        console.log(`\nYour order is being placed...\n`);
+        // console.log(`You wish to purchase ${purchase.qty} of ID: ${purchase.item_id}`);
+        return customer.buyProduct(purchase.item_id, purchase.qty);
+      })
+      // Log results of order
+      .then(orderSuccess => {
+        console.log(orderSuccess);
+        console.log(`Thank you for shopping at Bamazon!`);
+        db.disconnect();
+        return orderSuccess;
+      })
+      .catch( err => {throw err});
 }

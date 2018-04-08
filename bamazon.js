@@ -20,15 +20,13 @@ function determineRole() {
     .then(user => {
       switch (user.role.toLowerCase()) {
         case 'customer':
-          console.log(`You are a customer`);
-          // const customer = new Customer();
+          const customer = new Customer();
+          customer.initialize();
           break;
         case 'manager':
-          console.log(`You are a manager`);
           // const manager = new Manager();
           break;
         case 'supervisor':
-          console.log(`You are a supervisor`);
           // const supervisor = new Supervisor();
           break;
         default:

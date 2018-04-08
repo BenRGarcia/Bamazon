@@ -4,6 +4,8 @@ const Database = require('../database/database.js');
 const { table } = require('table');
 // Create global access to DB if instantiated
 let db;
+// Format display of USD
+let dollarsFormat = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
 // Define variables for ANSI text display styling
 let blueBG = '\u001b[44;1m', blackBG = '\u001b[0m', white = '\u001b[37m', blue = '\u001b[34m';
 // Define questions to ask user
@@ -100,7 +102,7 @@ function viewProducts() {
         let tableRow = [];
         tableRow.push(product.item_id);
         tableRow.push(product.product_name);
-        tableRow.push(`$` + `${product.price.toFixed(2)}`.padStart(10));
+        tableRow.push(`$` + `${product.price.toLocaleString('en', dollarsFormat)}`.padStart(10));
         tableRow.push(product.stock_quantity);
         // Add new row to products array
         products.push(tableRow);

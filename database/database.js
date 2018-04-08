@@ -167,14 +167,30 @@ class Database {
       });
     } catch (err) {console.error(err);}
   }
-  // Get sales data by department (left join)
-  getSalesData() {
+  // Get sales data by department (JOIN)
+  getSalesData() { // Passing
+    // Define parameters of DB query
+    let columns = 
+        `departments.department_id,
+        products.department_name,
+        departments.over_head_costs,
+        SUM(products.product_sales) AS 'product_sales',
+        SUM(products.product_sales) - departments.over_head_costs AS 'total_profit'`,
+      thisTable = 'products',
+      withThisTable = 'departments',
+      relation = '(products.department_name = departments.department_name)',
+      category = 'department_id',
+      // Build DB query string
+      queryString = `SELECT 
+                      ${columns} 
+                    FROM 
+                      ${thisTable} 
+                        INNER JOIN 
+                      ${withThisTable} ON ${relation} 
+                    GROUP BY ${category}`;
     try {
       return new Promise((resolve, reject) => {
-        let productCols = 'products.department_name, products.product_sales',
-          join = 'products.department_name = departments.department_name',
-          queryString = `SELECT ${productCols} FROM products LEFT JOIN departments ON ${join}`;
-        // Perform query with left join to compose sales data
+        // Execute DB query
         _executeQuery(queryString)
           .then(res => resolve(res))
           .catch(err => reject(err));
@@ -212,19 +228,3 @@ db.getSalesData()
   console.log(res);
   db.disconnect()
 });
-
-
-/* The secret sauce
-SELECT
-    departments.department_id,
-    products.department_name,
-    departments.over_head_costs,
-    SUM(products.product_sales) AS 'product_sales',
-    SUM(products.product_sales) - departments.over_head_costs AS 'total_profit'
-FROM
-	products
-INNER JOIN
-	departments
-ON (products.department_name = departments.department_name)
-GROUP BY department_id;
- */

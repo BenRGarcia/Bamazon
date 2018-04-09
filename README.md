@@ -51,6 +51,8 @@
 
 ![](https://user-images.githubusercontent.com/26657982/38507826-92e927aa-3beb-11e8-856d-a9be70394275.gif)
 
+![](https://user-images.githubusercontent.com/26657982/38508050-22d1df88-3bec-11e8-9e34-c756fa7b9d3b.gif)
+
 ### For 'Supervisors'
 
 1. Supervisors can view department sales reports (MySQL JOIN query)

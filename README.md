@@ -67,6 +67,6 @@
 
 [Supervisor Module Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/bamazonRoles/supervisor.js)
 
-#### Supervisor Functionality
+#### Supervisor View Department Profit/Loss Summary
 
-![](https://user-images.githubusercontent.com/26657982/38477183-5f257566-3b7f-11e8-8bc0-aded23e9cd16.gif)
+![View Dept Sales](https://user-images.githubusercontent.com/26657982/38508693-e61e3a12-3bed-11e8-9e04-595801c6fc5d.gif)

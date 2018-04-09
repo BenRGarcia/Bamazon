@@ -4,6 +4,8 @@
 
 * **Node.js**, **MySQL**, npm packages: **inquirer**, **mysql**, **table**, **dotenv**
 
+(Apologies for the slow GIF speed -- they seem to be playing at half speed...)
+
 ## Description
 
 ### App entry point: ```bamazon.js```

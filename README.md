@@ -35,7 +35,7 @@
 
 ### For 'Supervisors'
 
-![](https://user-images.githubusercontent.com/26657982/38477182-5f1b5298-3b7f-11e8-9705-b5fcf3a45782.gif)
+![](https://user-images.githubusercontent.com/26657982/38477183-5f257566-3b7f-11e8-8bc0-aded23e9cd16.gif)
 
 1. Supervisors can view department sales reports (MySQL JOIN query)
 2. Conditional formatting of profit/loss fields

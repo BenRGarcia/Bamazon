@@ -14,9 +14,9 @@ Remarks go here
 
 ### For 'Customers'
 
-[Insert gif of customer functionality]()
+[Insert gif of customer purchase with DB update]()
 
-[Insert gif of database updating in-stock qty and product sales]()
+[Insert gif of invalid input handling]()
 
 1. Customers can purchase products in specified quantities
 2. Database is updated after successful purchase to decrease in-stock quantity and add sales revenue
@@ -41,4 +41,5 @@ Remarks go here
 [Insert gif of database updating with new department info]()
 
 1. Supervisors can view department sales reports (MySQL JOIN query)
-2. Supervisors can add new departments
+2. Conditional formatting of profit/loss fields
+3. Supervisors can add new departments

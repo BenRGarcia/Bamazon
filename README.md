@@ -49,7 +49,7 @@
 
 #### Manager Functionality
 
-![](https://user-images.githubusercontent.com/26657982/38477182-5f1b5298-3b7f-11e8-9705-b5fcf3a45782.gif)
+![](https://user-images.githubusercontent.com/26657982/38507826-92e927aa-3beb-11e8-856d-a9be70394275.gif)
 
 ### For 'Supervisors'
 

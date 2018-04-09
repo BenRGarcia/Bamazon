@@ -12,7 +12,7 @@
 
 #### Splash Screen
 
-![](https://user-images.githubusercontent.com/26657982/38507279-20dfe74e-3bea-11e8-8a71-18e2e76b85b8.gif)
+![Program Startup](https://user-images.githubusercontent.com/26657982/38507279-20dfe74e-3bea-11e8-8a71-18e2e76b85b8.gif)
 
 ### MySQL Database
 
@@ -32,11 +32,11 @@
 
 #### Successful Customer Purchase
 
-![](https://user-images.githubusercontent.com/26657982/38507065-7d4d19e4-3be9-11e8-95fa-e95e97a3b0f7.gif)
+![Customer Purchase](https://user-images.githubusercontent.com/26657982/38507065-7d4d19e4-3be9-11e8-95fa-e95e97a3b0f7.gif)
 
 #### Unsuccessful Customer Purchase
 
-![](https://user-images.githubusercontent.com/26657982/38507474-995b6b9e-3bea-11e8-89b6-ab76192a6903.gif)
+![Customer Purchase Error Handling](https://user-images.githubusercontent.com/26657982/38507474-995b6b9e-3bea-11e8-89b6-ab76192a6903.gif)
 
 ### For 'Managers'
 
@@ -49,9 +49,11 @@
 
 #### Manager Functionality
 
-![](https://user-images.githubusercontent.com/26657982/38507826-92e927aa-3beb-11e8-856d-a9be70394275.gif)
+![View Products/Low Inventory](https://user-images.githubusercontent.com/26657982/38507826-92e927aa-3beb-11e8-856d-a9be70394275.gif)
 
-![](https://user-images.githubusercontent.com/26657982/38508050-22d1df88-3bec-11e8-9e34-c756fa7b9d3b.gif)
+![Add Product Qty](https://user-images.githubusercontent.com/26657982/38508050-22d1df88-3bec-11e8-9e34-c756fa7b9d3b.gif)
+
+![Add New Product](https://user-images.githubusercontent.com/26657982/38508288-cd76fc52-3bec-11e8-8d57-6a8030454d77.gif)
 
 ### For 'Supervisors'
 

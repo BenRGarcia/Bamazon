@@ -18,6 +18,7 @@
 
 1. Deliberate management of public/priviledged/private, immmutable/mutable members
 2. Extensive use of Promises and Error Handling for asynchronous database interaction
+3. All user inputs sanitized, no unescaped inputs have access to database
 
 [Database Module Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/database/database.js)
 
@@ -25,7 +26,7 @@
 
 1. Customers can purchase products in specified quantities
 2. Database is updated after successful purchase to decrease in-stock quantity and add sales revenue
-3. Customers cannot purchase more quantity than exist in the database
+3. Customers cannot purchase more quantity than exists in the database
 4. Input validation ensures 'Item Id' inputs are valid item id's
 
 [Customer Module Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/bamazonRoles/customer.js)

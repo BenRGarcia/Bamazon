@@ -10,13 +10,12 @@
 
 ![](https://user-images.githubusercontent.com/26657982/38476086-074e90b6-3b7a-11e8-8276-68769fe22563.gif)
 
-Remarks go here
 
 ### For 'Customers'
 
 [Insert gif of customer purchase with DB update]()
 
-[Insert gif of invalid input handling]()
+![](https://user-images.githubusercontent.com/26657982/38476384-75c1a028-3b7b-11e8-8921-0e23f11ac32d.gif)
 
 1. Customers can purchase products in specified quantities
 2. Database is updated after successful purchase to decrease in-stock quantity and add sales revenue

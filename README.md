@@ -8,7 +8,7 @@
 
 ### App entry point: ```bamazon.js```
 
-[Insert gif of typing 'node bamazon.js' and entering the splash screen, arrow through options.]()
+![](https://user-images.githubusercontent.com/26657982/38476086-074e90b6-3b7a-11e8-8276-68769fe22563.gif)
 
 Remarks go here
 

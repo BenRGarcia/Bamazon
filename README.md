@@ -36,7 +36,7 @@
 
 #### Unsuccessful Customer Purchase
 
-![](https://user-images.githubusercontent.com/26657982/38477185-5f38f5d2-3b7f-11e8-9b60-799d5f978ab5.gif)
+![](https://user-images.githubusercontent.com/26657982/38507474-995b6b9e-3bea-11e8-89b6-ab76192a6903.gif)
 
 ### For 'Managers'
 

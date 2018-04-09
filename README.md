@@ -34,7 +34,7 @@
 
 #### Successful Customer Purchase
 
-![](https://user-images.githubusercontent.com/26657982/38477184-5f2f3736-3b7f-11e8-9a17-56c1075a7d3d.gif)
+![](https://user-images.githubusercontent.com/26657982/38507065-7d4d19e4-3be9-11e8-95fa-e95e97a3b0f7.gif)
 
 #### Unsuccessful Customer Purchase
 

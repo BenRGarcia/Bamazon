@@ -1,5 +1,6 @@
 // Require dependencies
 const inquirer = require('inquirer');
+const fs = require('fs');
 // Require 'Customer', 'Manager', 'Supervisor' roles
 const Customer = require('./bamazonRoles/customer.js');
 const Manager = require('./bamazonRoles/manager.js');
@@ -22,8 +23,6 @@ const question = {
 
 // Prompt user to select role
 function determineRole() {
-  // Clear the terminal
-  console.reset();
   inquirer
     .prompt(question)
     .then(user => {
@@ -47,5 +46,12 @@ function determineRole() {
     });
 }
 
-// Initialize app
-determineRole();
+// Print welcome screen
+fs.readFile('./bamazon.txt', 'utf8', (err, data) => {
+  // Clear the terminal
+  console.reset();
+  console.log(data);
+  console.log(`\n`);
+  // Initialize app
+  determineRole();
+})

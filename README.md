@@ -47,11 +47,15 @@
 
 [Manager Module Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/bamazonRoles/manager.js)
 
-#### Manager Functionality
+#### View All Products, Low Inventory Products
 
 ![View Products/Low Inventory](https://user-images.githubusercontent.com/26657982/38507826-92e927aa-3beb-11e8-856d-a9be70394275.gif)
 
+#### Add Product Quantity
+
 ![Add Product Qty](https://user-images.githubusercontent.com/26657982/38508050-22d1df88-3bec-11e8-9e34-c756fa7b9d3b.gif)
+
+#### Add New Product
 
 ![Add New Product](https://user-images.githubusercontent.com/26657982/38508288-cd76fc52-3bec-11e8-8d57-6a8030454d77.gif)
 

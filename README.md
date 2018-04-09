@@ -4,15 +4,26 @@
 
 * **Node.js**, **MySQL**, npm packages: **inquirer**, **mysql**, **table**, **dotenv**
 
-(Apologies for the slow GIF speed -- they seem to be playing at half speed...)
+(Apologies for the slow GIFs -- they seem to be playing at half speed...)
 
 ## Description
 
 ### App entry point: ```bamazon.js```
 
+[App Entry Point Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/bamazon.js)
+
 ![](https://user-images.githubusercontent.com/26657982/38477186-5f45cc44-3b7f-11e8-8585-81e7872493dc.gif)
 
+### MySQL Database
+
+[Database Module Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/database/database.js)
+
+1. Deliberate management of public/priviledged/private, immmutable/mutable members
+2. Extensive use of Promises and Error Handling for asynchronous database interaction
+
 ### For 'Customers'
+
+[Customer Module Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/bamazonRoles/customer.js)
 
 ![](https://user-images.githubusercontent.com/26657982/38477184-5f2f3736-3b7f-11e8-9a17-56c1075a7d3d.gif)
 
@@ -25,6 +36,8 @@
 
 ### For 'Managers'
 
+[Manager Module Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/bamazonRoles/manager.js)
+
 ![](https://user-images.githubusercontent.com/26657982/38477182-5f1b5298-3b7f-11e8-9705-b5fcf3a45782.gif)
 
 
@@ -34,6 +47,8 @@
 4. Managers can add new products
 
 ### For 'Supervisors'
+
+[Supervisor Module Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/bamazonRoles/supervisor.js)
 
 ![](https://user-images.githubusercontent.com/26657982/38477183-5f257566-3b7f-11e8-8bc0-aded23e9cd16.gif)
 

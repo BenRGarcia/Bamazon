@@ -14,8 +14,6 @@
 
 #### Splash Screen
 
-![](https://user-images.githubusercontent.com/26657982/38505902-583c655e-3be6-11e8-9239-966de7538829.gif)
-
 ![](https://user-images.githubusercontent.com/26657982/38505903-584d4126-3be6-11e8-9b08-621c523ba697.gif)
 
 ### MySQL Database

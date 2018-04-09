@@ -19,6 +19,7 @@
 1. Deliberate management of public/priviledged/private, immmutable/mutable members
 2. Extensive use of Promises and Error Handling for asynchronous database interaction
 3. All user inputs sanitized, no unescaped inputs have access to database
+4. Memory optimization, use of prototypal rather than constructor methods
 
 [Database Module Source Code](https://github.com/BenRGarcia/Bamazon/blob/master/database/database.js)
 

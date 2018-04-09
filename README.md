@@ -4,8 +4,6 @@
 
 * **Node.js**, **MySQL**, npm packages: **inquirer**, **mysql**, **table**, **dotenv**
 
-(Apologies for the slow GIFs -- they seem to be playing at half speed...)
-
 ## Description
 
 ### App entry point: ```bamazon.js```
@@ -14,7 +12,7 @@
 
 #### Splash Screen
 
-![](https://user-images.githubusercontent.com/26657982/38505903-584d4126-3be6-11e8-9b08-621c523ba697.gif)
+![](https://user-images.githubusercontent.com/26657982/38507279-20dfe74e-3bea-11e8-8a71-18e2e76b85b8.gif)
 
 ### MySQL Database
 

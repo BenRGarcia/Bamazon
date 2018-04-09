@@ -7,7 +7,7 @@ let db;
 // Format display of USD
 let dollarsFormat = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
 // Define variables for ANSI text display styling
-let blueBG = '\u001b[44;1m', blackBG = '\u001b[0m', white = '\u001b[37m', blue = '\u001b[34m';
+let blueBG = '\u001b[44;1m', blackBG = '\u001b[0m', redBG = '\u001b[41;1m', white = '\u001b[37m', blue = '\u001b[34m';
 // Define questions to ask user
 const q1 = {
   name: 'action',
@@ -20,7 +20,22 @@ const q2 = {
   name: 'item_id',
   type: 'input',
   message: `Please type in the ${blue}ID${white} of the product you wish to increase inventory:`,
-  validate: id => !isNaN(id)
+  validate: (item_id) => {
+    return new Promise((resolve, reject) => {
+      db.getAllProducts()
+        .then(products => {
+          // Screen out non-numbers
+          if (!isNaN(item_id)) {
+            // Screen out item_id's not in DB
+            products.forEach(p => {
+              if (p.item_id == item_id) resolve(true);
+            });
+          }
+          resolve(`That ID is ${redBG} invalid ${blackBG}`);
+        })
+        .catch(err => reject(err));
+    });
+  }
 };
 const q3 = {
   name: 'qty',
